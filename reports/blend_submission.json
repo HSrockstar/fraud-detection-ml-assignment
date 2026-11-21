@@ -1,0 +1,33 @@
+{
+  "xgb": "xgb_r2_parts_smooth80",
+  "cat": "cat_r2_parts",
+  "xgb_weight": 0.7,
+  "cat_weight": 0.30000000000000004,
+  "cat_fixed_iterations": 1998,
+  "cat_fold_iterations": [
+    1998,
+    1890,
+    2000
+  ],
+  "oof_auc": 0.9478163587782216,
+  "rows": 299984,
+  "file": "submissions/xgb_cat_parts_70_30.csv",
+  "trained_on": "all_official_labeled_data",
+  "holdout_used_for_selection": false,
+  "uploaded": true,
+  "kaggle_submission": {
+    "competition": "playground-series-s6e11",
+    "reference": 58671711,
+    "file": "submissions/xgb_cat_parts_70_30.csv",
+    "description": "xgb parts 0.7 cat parts 0.3",
+    "submitted_at": "2026-11-21T13:46:16",
+    "status": "COMPLETE",
+    "public_score": 0.95132,
+    "private_score": null,
+    "public_leaderboard_rank": 897,
+    "public_leaderboard_teams": 2565,
+    "team_name": "Atlantic7931",
+    "leaderboard_checked_at": "2026-11-21T13:46:43"
+  },
+  "created_at": "2026-11-21T13:45:46.385232+00:00"
+}

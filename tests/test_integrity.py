@@ -7,7 +7,7 @@ from sklearn.metrics import f1_score
 
 from fraud import common
 from fraud.evaluation import f1_threshold, metrics
-from fraud.features import engineer, preprocessor, value_keys
+from fraud.features import cat_frame, engineer, preprocessor, value_keys
 
 
 def test_preprocessing_learns_only_training_data():
@@ -87,6 +87,14 @@ def test_value_key_columns_are_target_encoded_without_one_hot_or_label_leak():
     unseen = keyed.iloc[[0]].copy()
     unseen["vk_exact_amount_usd"] = "99999.0000"
     assert prep.transform(unseen)[0, column] == pytest.approx(0.5)
+
+
+def test_catboost_receives_part_bins_as_categories():
+    frame = value_keys(_value_frame([61.16]), "parts")
+    _encoded, columns = cat_frame(frame)
+    assert "vk_integer_amount_usd" in columns
+    assert "vk_fraction_amount_usd" in columns
+    assert "amount_usd" not in columns
 
 
 def test_score_pair_uses_integer_bins_not_exact_values():

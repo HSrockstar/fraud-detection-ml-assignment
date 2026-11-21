@@ -71,9 +71,10 @@ def fit_model(kind, params, x, y, seed, features=False, fixed_iterations=None):
                 model.set_params(device="cpu")
             elif kind == "cat":
                 encoded, cat_columns = cat_frame(x)
+                cat_params = {key: value for key, value in params.items() if key not in RESERVED_PARAMS}
                 common = dict(task_type="GPU", devices="0", loss_function="Logloss", eval_metric="AUC", random_seed=seed, thread_count=6, verbose=False, allow_writing_files=False)
                 if fixed_iterations is None:
-                    early_model = CatBoostClassifier(**common, **params)
+                    early_model = CatBoostClassifier(**common, **cat_params)
                     early_model.fit(encoded.iloc[train_idx], y[train_idx], cat_features=cat_columns,
                                     eval_set=(encoded.iloc[early_idx], y[early_idx]),
                                     early_stopping_rounds=cfg["early_stopping_rounds"], use_best_model=True)
@@ -81,7 +82,7 @@ def fit_model(kind, params, x, y, seed, features=False, fixed_iterations=None):
                     del early_model
                 else:
                     selected_iterations = int(fixed_iterations)
-                final_params = {**params, "iterations": selected_iterations}
+                final_params = {**cat_params, "iterations": selected_iterations}
                 model = CatBoostClassifier(**common, **final_params)
                 model.fit(encoded, y, cat_features=cat_columns)
                 trained_device = model.get_all_params()["task_type"]
