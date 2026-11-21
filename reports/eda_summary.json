@@ -1,0 +1,61 @@
+{
+  "competition": "playground-series-s6e11",
+  "source": "https://www.kaggle.com/competitions/playground-series-s6e11/data",
+  "train_rows": 699960,
+  "competition_test_rows": 299984,
+  "feature_count": 24,
+  "dev_rows": 559968,
+  "holdout_rows": 139992,
+  "numeric_features": [
+    "amount_usd",
+    "hours_since_last_txn",
+    "txn_count_last_24h",
+    "distance_from_home_km",
+    "card_age_months",
+    "customer_age",
+    "account_balance_usd",
+    "cvv_retry_count",
+    "velocity_score",
+    "time_of_day_hour",
+    "day_of_week",
+    "merchant_risk_score",
+    "prior_disputes"
+  ],
+  "categorical_features": [
+    "merchant_category",
+    "card_type",
+    "auth_method",
+    "channel",
+    "device_type",
+    "is_foreign_transaction",
+    "is_new_merchant",
+    "used_vpn",
+    "ip_country_mismatch",
+    "billing_shipping_mismatch",
+    "is_ai_generated_scam_attempt"
+  ],
+  "dev_class_counts": {
+    "0.0": 550617,
+    "1.0": 9351
+  },
+  "dev_fraud_fraction": 0.01669916852391565,
+  "dev_duplicate_features": 0,
+  "all_normal_accuracy_on_dev": 0.9833008314760844,
+  "scope": "有监督分析仅使用开发集；独立测试集不用于特征选择和调参。",
+  "top_numeric_associations": {
+    "cvv_retry_count": 0.19134340485278525,
+    "merchant_risk_score": 0.11028197209842944,
+    "velocity_score": 0.09339856520029827,
+    "customer_age": 0.055950948674267434,
+    "txn_count_last_24h": 0.054425818846847863,
+    "hours_since_last_txn": 0.030458260542238273,
+    "prior_disputes": 0.023844276823305883,
+    "amount_usd": 0.019704443788705995
+  },
+  "total_dev_missing": 0,
+  "max_numeric_ks": {
+    "feature": "day_of_week",
+    "ks_statistic": 0.0038594490321309793,
+    "p_value": 0.005924298728044816
+  }
+}

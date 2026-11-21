@@ -1,0 +1,341 @@
+{
+  "frozen_at": "2026-11-21T07:15:01.752552+00:00",
+  "criterion": "开发集 OOF ROC-AUC；融合比最佳单模型至少提升 0.00005 才采用",
+  "weights": {
+    "xgb_target_encoded": 0.7000000000000001,
+    "cat_baseline": 0.29999999999999993
+  },
+  "oof_metrics": {
+    "roc_auc": 0.9462735237853402,
+    "average_precision": 0.5069064844300618,
+    "log_loss": 0.04582092641918521,
+    "accuracy": 0.9840758757643294,
+    "precision": 0.5256440557787757,
+    "recall": 0.47567105122446796,
+    "f1": 0.49941054286195474,
+    "threshold": 0.22547346321693232,
+    "confusion_matrix": [
+      [
+        546603,
+        4014
+      ],
+      [
+        4903,
+        4448
+      ]
+    ]
+  },
+  "best_single": {
+    "weights": {
+      "xgb_target_encoded": 1.0
+    },
+    "auc": 0.9456986304604758
+  },
+  "candidates": [
+    {
+      "weights": {
+        "cat_baseline": 1.0
+      },
+      "auc": 0.943970739652839
+    },
+    {
+      "weights": {
+        "logistic_baseline": 1.0
+      },
+      "auc": 0.9409919318308868
+    },
+    {
+      "weights": {
+        "tree_baseline": 1.0
+      },
+      "auc": 0.8992572889280275
+    },
+    {
+      "weights": {
+        "xgb_baseline": 1.0
+      },
+      "auc": 0.9445253785293501
+    },
+    {
+      "weights": {
+        "xgb_engineered": 1.0
+      },
+      "auc": 0.9445227807494463
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 1.0
+      },
+      "auc": 0.9456986304604758
+    },
+    {
+      "weights": {
+        "xgb_tuned": 1.0
+      },
+      "auc": 0.944820031892176
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.1,
+        "cat_baseline": 0.9
+      },
+      "auc": 0.9442491448253928
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.2,
+        "cat_baseline": 0.8
+      },
+      "auc": 0.9444706536557489
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.30000000000000004,
+        "cat_baseline": 0.7
+      },
+      "auc": 0.9446418025935845
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.4,
+        "cat_baseline": 0.6
+      },
+      "auc": 0.9447654649188449
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.5,
+        "cat_baseline": 0.5
+      },
+      "auc": 0.9448446251991179
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.6,
+        "cat_baseline": 0.4
+      },
+      "auc": 0.9448794357023155
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.7000000000000001,
+        "cat_baseline": 0.29999999999999993
+      },
+      "auc": 0.9448682352709836
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.8,
+        "cat_baseline": 0.19999999999999996
+      },
+      "auc": 0.9448098100346579
+    },
+    {
+      "weights": {
+        "xgb_baseline": 0.9,
+        "cat_baseline": 0.09999999999999998
+      },
+      "auc": 0.9446988024546559
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.1,
+        "cat_baseline": 0.9
+      },
+      "auc": 0.9442855885184682
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.2,
+        "cat_baseline": 0.8
+      },
+      "auc": 0.9445333565715918
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.30000000000000004,
+        "cat_baseline": 0.7
+      },
+      "auc": 0.9447230041184312
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.4,
+        "cat_baseline": 0.6
+      },
+      "auc": 0.9448579276656559
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.5,
+        "cat_baseline": 0.5
+      },
+      "auc": 0.9449430463990467
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.6,
+        "cat_baseline": 0.4
+      },
+      "auc": 0.944977488079842
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.7000000000000001,
+        "cat_baseline": 0.29999999999999993
+      },
+      "auc": 0.9449584330326174
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.8,
+        "cat_baseline": 0.19999999999999996
+      },
+      "auc": 0.9448835673289386
+    },
+    {
+      "weights": {
+        "xgb_engineered": 0.9,
+        "cat_baseline": 0.09999999999999998
+      },
+      "auc": 0.9447427255319861
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.1,
+        "cat_baseline": 0.9
+      },
+      "auc": 0.944631546067926
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.2,
+        "cat_baseline": 0.8
+      },
+      "auc": 0.9451503712015785
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.30000000000000004,
+        "cat_baseline": 0.7
+      },
+      "auc": 0.9455566788945897
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.4,
+        "cat_baseline": 0.6
+      },
+      "auc": 0.9458674817842961
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.5,
+        "cat_baseline": 0.5
+      },
+      "auc": 0.9460910190407532
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.6,
+        "cat_baseline": 0.4
+      },
+      "auc": 0.9462264304667952
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.7000000000000001,
+        "cat_baseline": 0.29999999999999993
+      },
+      "auc": 0.9462735237853402
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.8,
+        "cat_baseline": 0.19999999999999996
+      },
+      "auc": 0.9462201430062271
+    },
+    {
+      "weights": {
+        "xgb_target_encoded": 0.9,
+        "cat_baseline": 0.09999999999999998
+      },
+      "auc": 0.9460444506969067
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.1,
+        "cat_baseline": 0.9
+      },
+      "auc": 0.9443181412226016
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.2,
+        "cat_baseline": 0.8
+      },
+      "auc": 0.9445975326406304
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.30000000000000004,
+        "cat_baseline": 0.7
+      },
+      "auc": 0.9448183956918994
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.4,
+        "cat_baseline": 0.6
+      },
+      "auc": 0.9449838825552304
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.5,
+        "cat_baseline": 0.5
+      },
+      "auc": 0.9450977243771027
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.6,
+        "cat_baseline": 0.4
+      },
+      "auc": 0.9451600553630353
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.7000000000000001,
+        "cat_baseline": 0.29999999999999993
+      },
+      "auc": 0.9451694464476076
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.8,
+        "cat_baseline": 0.19999999999999996
+      },
+      "auc": 0.945122268643678
+    },
+    {
+      "weights": {
+        "xgb_tuned": 0.9,
+        "cat_baseline": 0.09999999999999998
+      },
+      "auc": 0.945009952802644
+    }
+  ],
+  "f1_threshold": 0.22547346321693232,
+  "selection_note": "OOF 用于选参、选权重和选阈值，其选后成绩可能乐观；独立测试成绩另列。",
+  "all_experiments": [
+    "cat_baseline",
+    "logistic_baseline",
+    "tree_baseline",
+    "xgb_baseline",
+    "xgb_engineered",
+    "xgb_target_encoded",
+    "xgb_tuned"
+  ]
+}

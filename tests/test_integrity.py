@@ -1,0 +1,81 @@
+import json
+
+import numpy as np
+import pandas as pd
+import pytest
+from sklearn.metrics import f1_score
+
+from fraud import common
+from fraud.evaluation import f1_threshold, metrics
+from fraud.features import engineer, preprocessor
+
+
+def test_preprocessing_learns_only_training_data():
+    train = pd.DataFrame({"amount": [1., 2., np.nan, 3.], "category": ["A", "B", "A", "A"]})
+    valid = pd.DataFrame({"amount": [1e9, np.nan], "category": ["UNSEEN", "A"]})
+    prep = preprocessor(train, scale=True).fit(train)
+    before = prep.named_transformers_["numeric"].named_steps["impute"].statistics_.copy()
+    encoded = prep.transform(valid)
+    assert encoded.shape == (2, 3)
+    assert np.isfinite(encoded).all()
+    assert np.array_equal(before, [2.])
+    assert np.array_equal(prep.named_transformers_["numeric"].named_steps["impute"].statistics_, before)
+    assert "UNSEEN" not in prep.named_transformers_["categorical"].named_steps["encode"].categories_[0]
+
+
+def test_feature_engineering_handles_zero_and_boolean_signals():
+    x = pd.DataFrame({"amount_usd": [10., 20.], "account_balance_usd": [0., 100.],
+                      "used_vpn": [True, False], "ip_country_mismatch": [True, True], "time_of_day_hour": [0, 6]})
+    output = engineer(x, enabled=True)
+    assert np.isnan(output.loc[0, "amount_balance_ratio"])
+    assert output.loc[1, "amount_balance_ratio"] == pytest.approx(0.2)
+    assert output.risk_flag_count.tolist() == [2, 1]
+    assert output.night_transaction.tolist() == [1, 0]
+    assert np.isfinite(output.select_dtypes("number").to_numpy()[~np.isnan(output.select_dtypes("number").to_numpy())]).all()
+    assert "risk_flag_count" not in x
+
+
+def test_threshold_optimizes_f1_on_supplied_validation_predictions():
+    y = np.array([0, 0, 1, 0, 1, 1])
+    p = np.array([0.01, 0.05, 0.2, 0.25, 0.3, 0.4])
+    threshold = f1_threshold(y, p)
+    assert f1_score(y, p >= threshold) == max(f1_score(y, p >= t) for t in p)
+
+
+def test_target_encoding_unique_training_values_do_not_reveal_own_labels():
+    x = pd.DataFrame({"unique_value": np.arange(100)})
+    y = np.tile([0, 1], 50)
+    prep = preprocessor(x, target_encode=True, seed=42)
+    encoded = prep.fit_transform(x, y)
+    names = prep.get_feature_names_out().tolist()
+    target_column = names.index("target__unique_value")
+    # 唯一值在其他内部训练折中不存在，只能回退到 0.5，而不是自身标签。
+    assert np.allclose(encoded[:, target_column], 0.5)
+    assert prep.transform(pd.DataFrame({"unique_value": [10000]}))[0, target_column] == pytest.approx(0.5)
+
+
+@pytest.mark.parametrize("probability", [[0.1, np.nan], [-0.1, 0.9], [0.1, 1.1]])
+def test_invalid_probability_is_rejected(probability):
+    with pytest.raises(ValueError, match="预测概率"):
+        metrics([0, 1], probability)
+
+
+def test_split_is_disjoint_stratified_persistent_and_config_checked(tmp_path, monkeypatch):
+    monkeypatch.setattr(common, "ROOT", tmp_path)
+    (tmp_path / "configs").mkdir()
+    configuration = {"seed": 42, "holdout_fraction": 0.2, "n_splits": 3}
+    (tmp_path / "configs/experiment.json").write_text(json.dumps(configuration), encoding="utf-8")
+    frame = pd.DataFrame({"id": np.arange(300), "is_fraud": np.tile([0, 0, 0, 0, 1], 60)})
+    split = common.splits(frame)
+    dev = split.partition == "dev"
+    assert len(split) == 300 and split.id.is_unique
+    assert (split.loc[~dev, "fold"] == -1).all()
+    assert set(split.loc[dev, "fold"]) == {0, 1, 2}
+    assert set(split.loc[dev, "id"]).isdisjoint(split.loc[~dev, "id"])
+    for fold in range(3):
+        assert frame.loc[split.fold == fold, "is_fraud"].mean() == pytest.approx(0.2)
+    pd.testing.assert_frame_equal(split, common.splits(frame))
+    configuration["seed"] = 43
+    (tmp_path / "configs/experiment.json").write_text(json.dumps(configuration), encoding="utf-8")
+    with pytest.raises(ValueError, match="数据或划分配置变化"):
+        common.splits(frame)

@@ -1,0 +1,17 @@
+{
+  "best_params": {
+    "learning_rate": 0.0886816342974295,
+    "max_depth": 3,
+    "min_child_weight": 18.02471215771192,
+    "subsample": 0.9974913605156784,
+    "colsample_bytree": 0.9996687449838664,
+    "reg_lambda": 1.1500035567289912,
+    "reg_alpha": 2.7305861513999963,
+    "n_estimators": 2000,
+    "max_bin": 256
+  },
+  "search_fold": 0,
+  "search_auc": 0.9449786047435599,
+  "completed_trials": 10,
+  "note": "该搜索折参与了参数选择，其分数有选择偏差；最终报告另列独立测试集评估。"
+}

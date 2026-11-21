@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.env
+kaggle.json
+data/raw/
+data/processed/
+artifacts/
+submissions/*.csv
+catboost_info/
+*.log
+outputs/*.zip

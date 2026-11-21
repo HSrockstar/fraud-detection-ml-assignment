@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-11-21T07:21:08.335992+00:00",
+  "passed": true,
+  "checks": [
+    "三个官方数据文件 SHA256 与下载清单一致",
+    "cat_baseline: OOF 覆盖、指标复算、持久化推理一致",
+    "logistic_baseline: OOF 覆盖、指标复算、持久化推理一致",
+    "tree_baseline: OOF 覆盖、指标复算、持久化推理一致",
+    "xgb_baseline: OOF 覆盖、指标复算、持久化推理一致",
+    "xgb_engineered: OOF 覆盖、指标复算、持久化推理一致",
+    "xgb_target_encoded: OOF 覆盖、指标复算、持久化推理一致",
+    "xgb_tuned: OOF 覆盖、指标复算、持久化推理一致",
+    "独立测试集与开发集完全分离，所有最终指标复算一致",
+    "299984 行提交文件列名、顺序、范围和最终模型推理一致"
+  ]
+}

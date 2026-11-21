@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-11-21T06:54:58.906757+00:00",
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU, 8188 MiB, 581.08",
+  "packages": {
+    "numpy": "2.5.5",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "catboost": "1.2.10",
+    "optuna": "4.9.0",
+    "matplotlib": "3.11.2",
+    "kaggle": "2.2.5"
+  },
+  "training_checks": {
+    "xgboost": {
+      "device": "cuda:0",
+      "auc": 0.9674896392417963,
+      "seconds": 0.7313667999987956
+    },
+    "catboost": {
+      "device": "GPU",
+      "auc": 0.9638290644744888,
+      "seconds": 0.9556800000027579
+    }
+  }
+}

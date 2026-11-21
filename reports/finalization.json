@@ -1,0 +1,34 @@
+{
+  "completed_at": "2026-11-21T07:19:53.962896+00:00",
+  "selection_frozen_at": "2026-11-21T07:15:01.752552+00:00",
+  "weights": {
+    "xgb_target_encoded": 0.7000000000000001,
+    "cat_baseline": 0.29999999999999993
+  },
+  "submission": "submissions/round1_best.csv",
+  "rows": 299984,
+  "fixed_iterations": {
+    "cat_baseline": 1202,
+    "logistic_baseline": null,
+    "tree_baseline": null,
+    "xgb_baseline": 520,
+    "xgb_engineered": 471,
+    "xgb_target_encoded": 389,
+    "xgb_tuned": 451
+  },
+  "holdout_auc": 0.9520603865112867,
+  "kaggle_submission_status": "已上传并完成评分（公开榜）",
+  "kaggle_submission": {
+    "competition": "playground-series-s6e11",
+    "reference": 58656537,
+    "file": "submissions/round1_best.csv",
+    "description": "round1_best final model submission",
+    "submitted_at": "2026-11-21T07:40:31.967000",
+    "status": "COMPLETE",
+    "public_score": 0.94922,
+    "private_score": null,
+    "public_leaderboard_rank": 1254,
+    "public_leaderboard_teams": 2528,
+    "leaderboard_checked_at": "2026-11-21T07:41:52"
+  }
+}
