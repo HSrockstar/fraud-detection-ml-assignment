@@ -1,0 +1,30 @@
+{
+  "experiment": "xgb_r2_parts_smooth80",
+  "fixed_iterations": 410,
+  "fold_iterations": [
+    337,
+    546,
+    410
+  ],
+  "rows": 299984,
+  "file": "submissions/xgb_r2_parts_smooth80.csv",
+  "oof_auc": 0.9473121275721721,
+  "trained_on": "all_official_labeled_data",
+  "holdout_used_for_selection": false,
+  "uploaded": true,
+  "created_at": "2026-11-21T10:14:51.456394+00:00",
+  "kaggle_submission": {
+    "competition": "playground-series-s6e11",
+    "reference": 58664606,
+    "file": "submissions/xgb_r2_parts_smooth80.csv",
+    "description": "xgb parts target encoding smooth 80",
+    "submitted_at": "2026-11-21T11:41:00.387000",
+    "status": "COMPLETE",
+    "public_score": 0.95116,
+    "private_score": null,
+    "public_leaderboard_rank": 950,
+    "public_leaderboard_teams": 2560,
+    "team_name": "Atlantic7931",
+    "leaderboard_checked_at": "2026-11-21T11:41:46"
+  }
+}

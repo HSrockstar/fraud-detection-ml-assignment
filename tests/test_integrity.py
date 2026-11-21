@@ -7,7 +7,7 @@ from sklearn.metrics import f1_score
 
 from fraud import common
 from fraud.evaluation import f1_threshold, metrics
-from fraud.features import engineer, preprocessor
+from fraud.features import engineer, preprocessor, value_keys
 
 
 def test_preprocessing_learns_only_training_data():
@@ -40,6 +40,68 @@ def test_threshold_optimizes_f1_on_supplied_validation_predictions():
     p = np.array([0.01, 0.05, 0.2, 0.25, 0.3, 0.4])
     threshold = f1_threshold(y, p)
     assert f1_score(y, p >= threshold) == max(f1_score(y, p >= t) for t in p)
+
+
+def _value_frame(amount):
+    rows = len(amount)
+    return pd.DataFrame({
+        "amount_usd": amount,
+        "account_balance_usd": np.full(rows, 10.0),
+        "distance_from_home_km": np.full(rows, 1.0),
+        "hours_since_last_txn": np.full(rows, 1.25),
+        "velocity_score": np.full(rows, 5.5),
+        "merchant_risk_score": np.full(rows, 29.2),
+        "cvv_retry_count": np.zeros(rows, dtype=int),
+        "auth_method": ["OTP"] * rows,
+        "is_foreign_transaction": [False] * rows,
+        "merchant_category": ["Groceries"] * rows,
+        "channel": ["Web"] * rows,
+        "device_type": ["Mobile"] * rows,
+        "used_vpn": [False] * rows,
+    })
+
+
+def test_value_keys_are_label_free_tokens_and_do_not_mutate_input():
+    frame = _value_frame([61.16, 0.0])
+    encoded = value_keys(frame, "exact+parts+digits+interactions")
+    assert frame.columns.tolist() == _value_frame([61.16, 0.0]).columns.tolist()
+    assert encoded.loc[0, "vk_exact_amount_usd"] == "61.1600"
+    assert encoded.loc[0, "vk_integer_amount_usd"] == "61"
+    assert encoded.loc[0, "vk_fraction_amount_usd"] == "0.1600"
+    assert [encoded.loc[0, f"vk_digit{n}_amount_usd"] for n in (1, 2, 3)] == ["6", "61", "611"]
+    assert encoded.loc[1, "vk_digit1_amount_usd"] == "0"
+    assert encoded.loc[0, "vk_cvv_auth"] == "0|OTP"
+
+
+def test_value_key_columns_are_target_encoded_without_one_hot_or_label_leak():
+    frame = _value_frame(np.arange(80) + 0.16)
+    keyed = value_keys(frame, "exact")
+    y = np.tile([0, 1], 40)
+    prep = preprocessor(keyed, target_encode=True, seed=0)
+    encoded = prep.fit_transform(keyed, y)
+    names = prep.get_feature_names_out().tolist()
+    column = names.index("target__vk_exact_amount_usd")
+    assert encoded.shape[1] < len(frame)
+    assert not any(name.startswith("categorical__vk_") for name in names)
+    assert np.allclose(encoded[:, column], 0.5)
+    unseen = keyed.iloc[[0]].copy()
+    unseen["vk_exact_amount_usd"] = "99999.0000"
+    assert prep.transform(unseen)[0, column] == pytest.approx(0.5)
+
+
+def test_score_pair_uses_integer_bins_not_exact_values():
+    frame = _value_frame([10.0, 11.0])
+    frame["merchant_risk_score"] = [77.4, 8.1]
+    frame["velocity_score"] = [53.2, 0.7]
+    encoded = value_keys(frame, "score_pair")
+    assert encoded.loc[0, "vk_integer_merchant_risk_score"] == "77"
+    assert encoded.loc[0, "vk_merchant_velocity_integer"] == "77|53"
+    assert "vk_integer_amount_usd" not in encoded.columns
+
+
+def test_unknown_value_encoding_is_rejected():
+    with pytest.raises(ValueError, match="未知取值编码"):
+        value_keys(_value_frame([1.0]), "exact+exact")
 
 
 def test_target_encoding_unique_training_values_do_not_reveal_own_labels():

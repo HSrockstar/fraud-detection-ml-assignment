@@ -12,13 +12,23 @@ from threadpoolctl import threadpool_limits
 from xgboost import XGBClassifier
 
 from .common import config
-from .features import cat_frame, engineer, preprocessor
+from .features import cat_frame, engineer, preprocessor, value_keys
+
+RESERVED_PARAMS = {"target_encoding", "value_encoding", "target_smooth"}
+
+
+def model_frame(x, features, params):
+    frame = engineer(x, features)
+    mode = params.get("value_encoding")
+    if mode:
+        frame = value_keys(frame, mode)
+    return frame
 
 
 def fit_model(kind, params, x, y, seed, features=False, fixed_iterations=None):
     """外层验证样本不参与早停；轮数由训练数据内部的独立子集确定。"""
     cfg = config()
-    x = engineer(x, features)
+    x = model_frame(x, features, params)
     y = np.asarray(y)
     start = time.perf_counter()
     selected_iterations = None
@@ -35,11 +45,12 @@ def fit_model(kind, params, x, y, seed, features=False, fixed_iterations=None):
         else:
             train_idx, early_idx = train_test_split(np.arange(len(y)), test_size=cfg["inner_early_stop_fraction"], stratify=y, random_state=seed)
             if kind == "xgb":
-                xgb_params = {key: value for key,value in params.items() if key != "target_encoding"}
+                xgb_params = {key: value for key, value in params.items() if key not in RESERVED_PARAMS}
                 use_target_encoding = bool(params.get("target_encoding", False))
+                target_smooth = float(params.get("target_smooth", 20.0))
                 common = dict(tree_method="hist", device="cuda", objective="binary:logistic", eval_metric="auc", n_jobs=6, random_state=seed)
                 if fixed_iterations is None:
-                    early_prep = preprocessor(x, target_encode=use_target_encoding, seed=seed)
+                    early_prep = preprocessor(x, target_encode=use_target_encoding, seed=seed, target_smooth=target_smooth)
                     inner_x = early_prep.fit_transform(x.iloc[train_idx], y[train_idx]).astype("float32")
                     early_x = early_prep.transform(x.iloc[early_idx]).astype("float32")
                     early_model = XGBClassifier(**common, **xgb_params, early_stopping_rounds=cfg["early_stopping_rounds"])
@@ -48,7 +59,7 @@ def fit_model(kind, params, x, y, seed, features=False, fixed_iterations=None):
                     del early_model, early_prep, inner_x, early_x
                 else:
                     selected_iterations = int(fixed_iterations)
-                prep = preprocessor(x, target_encode=use_target_encoding, seed=seed)
+                prep = preprocessor(x, target_encode=use_target_encoding, seed=seed, target_smooth=target_smooth)
                 encoded = prep.fit_transform(x, y).astype("float32")
                 final_params = {**xgb_params, "n_estimators": selected_iterations}
                 model = XGBClassifier(**common, **final_params)
@@ -84,7 +95,7 @@ def fit_model(kind, params, x, y, seed, features=False, fixed_iterations=None):
 
 
 def predict(bundle, x):
-    x = engineer(x, bundle["features"])
+    x = model_frame(x, bundle["features"], bundle["parameters"])
     encoded = cat_frame(x)[0] if bundle["kind"] == "cat" else bundle["preprocessor"].transform(x).astype("float32")
     with threadpool_limits(limits=6):
         return bundle["model"].predict_proba(encoded)[:, 1]

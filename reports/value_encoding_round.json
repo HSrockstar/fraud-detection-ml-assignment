@@ -1,0 +1,129 @@
+{
+  "selection": "开发集 OOF ROC-AUC。第 0 折只用于筛选，三折结果才用于取舍。独立测试集不参与。",
+  "published_target_encoded_oof_auc": 0.9456986304604758,
+  "published_blend_oof_auc": 0.9462735237853402,
+  "fold0_screen": [
+    {
+      "name": "reference",
+      "value_encoding": null,
+      "fold0_auc": 0.9460017923754911,
+      "seconds": 12.140299899998354
+    },
+    {
+      "name": "exact",
+      "value_encoding": "exact",
+      "fold0_auc": 0.9460880181587454,
+      "seconds": 14.832480100001703
+    },
+    {
+      "name": "parts",
+      "value_encoding": "parts",
+      "fold0_auc": 0.9475832337901772,
+      "seconds": 15.420192100002168
+    },
+    {
+      "name": "digits",
+      "value_encoding": "digits",
+      "fold0_auc": 0.9468519157762126,
+      "seconds": 18.377061200000753
+    },
+    {
+      "name": "interactions",
+      "value_encoding": "interactions",
+      "fold0_auc": 0.9465648915407022,
+      "seconds": 12.726986400000897
+    },
+    {
+      "name": "interactions_ext",
+      "value_encoding": "interactions+interactions_ext",
+      "fold0_auc": 0.9463982642217923,
+      "seconds": 14.483879800001887
+    },
+    {
+      "name": "exact_digits",
+      "value_encoding": "exact+digits",
+      "fold0_auc": 0.9467716794240499,
+      "seconds": 20.593869299998914
+    },
+    {
+      "name": "full",
+      "value_encoding": "exact+parts+digits+interactions+interactions_ext",
+      "fold0_auc": 0.9475350211859541,
+      "seconds": 26.607785200001672
+    }
+  ],
+  "rows": [
+    {
+      "name": "xgb_r2_reference",
+      "value_encoding": null,
+      "target_smooth": 20.0,
+      "oof_auc": 0.9456986304604758,
+      "oof_ap": 0.5037221551177784,
+      "std_fold_auc": 0.0008887288178489901,
+      "seconds": 42.97660299999916
+    },
+    {
+      "name": "xgb_r2_parts",
+      "value_encoding": "parts",
+      "target_smooth": 20.0,
+      "oof_auc": 0.9471141445225167,
+      "oof_ap": 0.5092524650134874,
+      "std_fold_auc": 0.0008406639915288775,
+      "seconds": 61.49983919999795
+    },
+    {
+      "name": "xgb_r2_full",
+      "value_encoding": "exact+parts+digits+interactions+interactions_ext",
+      "target_smooth": 20.0,
+      "oof_auc": 0.9471114708028765,
+      "oof_ap": 0.507690786091949,
+      "std_fold_auc": 0.0010480386094192716,
+      "seconds": 106.5055594000005
+    },
+    {
+      "name": "xgb_r2_digits",
+      "value_encoding": "digits",
+      "target_smooth": 20.0,
+      "oof_auc": 0.9466110922274624,
+      "oof_ap": 0.5049958850392257,
+      "std_fold_auc": 0.0007465870204874603,
+      "seconds": 58.13587320000079
+    },
+    {
+      "name": "xgb_r2_exact_digits",
+      "value_encoding": "exact+digits",
+      "target_smooth": 20.0,
+      "oof_auc": 0.9465428793108065,
+      "oof_ap": 0.5062446886975298,
+      "std_fold_auc": 0.0006580020505639496,
+      "seconds": 73.56646429999819
+    },
+    {
+      "name": "xgb_r2_parts_smooth5",
+      "value_encoding": "parts",
+      "target_smooth": 5.0,
+      "oof_auc": 0.9470741698259243,
+      "oof_ap": 0.5105751866550798,
+      "std_fold_auc": 0.0009643742773919437,
+      "seconds": 60.293278799999825
+    },
+    {
+      "name": "xgb_r2_parts_smooth80",
+      "value_encoding": "parts",
+      "target_smooth": 80.0,
+      "oof_auc": 0.9473121275721721,
+      "oof_ap": 0.5101607489386514,
+      "std_fold_auc": 0.0007262363860727288,
+      "seconds": 56.66783990000113
+    }
+  ],
+  "best": {
+    "name": "xgb_r2_parts_smooth80",
+    "value_encoding": "parts",
+    "target_smooth": 80.0,
+    "oof_auc": 0.9473121275721721,
+    "oof_ap": 0.5101607489386514,
+    "std_fold_auc": 0.0007262363860727288,
+    "seconds": 56.66783990000113
+  }
+}

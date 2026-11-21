@@ -36,7 +36,7 @@ def assert_selection_open():
         raise RuntimeError("本轮已冻结模型选择。后续改进仍可使用开发集，但须另建实验轮次并披露既有测试集已被评估。")
 
 
-def run_cv(name, kind, params, features=False):
+def run_cv(name, kind, params, features=False, after_freeze=False):
     cfg = config()
     spec = {"name": name, "kind": kind, "parameters": params, "features": features}
     if result_path(name).exists():
@@ -45,7 +45,8 @@ def run_cv(name, kind, params, features=False):
             raise ValueError(f"实验 {name} 已存在且参数不同，请使用新的名称")
         print(f"复用已完成实验 {name}", flush=True)
         return existing
-    assert_selection_open()
+    if not after_freeze:
+        assert_selection_open()
     dev, folds, _ = development_data()
     x, y = dev.drop(columns=[ID, TARGET]), dev[TARGET].to_numpy()
     folder = ROOT / "artifacts" / name
@@ -83,7 +84,8 @@ def run_cv(name, kind, params, features=False):
               "std_fold_auc": float(np.std([f["metrics"]["roc_auc"] for f in fold_results], ddof=1)),
               "total_seconds": time.perf_counter() - started}
     write_json(result_path(name), result)
-    refresh_comparison()
+    if not after_freeze:
+        refresh_comparison()
     return result
 
 
