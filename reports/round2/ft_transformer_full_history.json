@@ -1,0 +1,80 @@
+[
+  {
+    "epoch": 1,
+    "train_loss": 0.062322428469126806,
+    "train_seconds": 25.525704199997563,
+    "epoch_total_seconds": 25.525744599999598
+  },
+  {
+    "epoch": 2,
+    "train_loss": 0.04842526715812332,
+    "train_seconds": 26.33003710000048,
+    "epoch_total_seconds": 26.330068200000824
+  },
+  {
+    "epoch": 3,
+    "train_loss": 0.04757713275580033,
+    "train_seconds": 24.900174700000207,
+    "epoch_total_seconds": 24.900260399997933
+  },
+  {
+    "epoch": 4,
+    "train_loss": 0.04721189425110006,
+    "train_seconds": 24.45849950000047,
+    "epoch_total_seconds": 24.458529200001067
+  },
+  {
+    "epoch": 5,
+    "train_loss": 0.04697998367763872,
+    "train_seconds": 25.74997760000042,
+    "epoch_total_seconds": 25.750005100002454
+  },
+  {
+    "epoch": 6,
+    "train_loss": 0.046839478997014114,
+    "train_seconds": 26.696930899997824,
+    "epoch_total_seconds": 26.696960199999012
+  },
+  {
+    "epoch": 7,
+    "train_loss": 0.04675178983441911,
+    "train_seconds": 24.77852559999883,
+    "epoch_total_seconds": 24.778566500001034
+  },
+  {
+    "epoch": 8,
+    "train_loss": 0.046670217092762444,
+    "train_seconds": 26.10813490000146,
+    "epoch_total_seconds": 26.108173500000703
+  },
+  {
+    "epoch": 9,
+    "train_loss": 0.04665187341062346,
+    "train_seconds": 24.70918829999937,
+    "epoch_total_seconds": 24.709220600001572
+  },
+  {
+    "epoch": 10,
+    "train_loss": 0.04654712412137837,
+    "train_seconds": 25.18655199999921,
+    "epoch_total_seconds": 25.18660589999854
+  },
+  {
+    "epoch": 11,
+    "train_loss": 0.04646794828008029,
+    "train_seconds": 25.20060999999987,
+    "epoch_total_seconds": 25.20064739999725
+  },
+  {
+    "epoch": 12,
+    "train_loss": 0.046416382833483344,
+    "train_seconds": 26.751190200000565,
+    "epoch_total_seconds": 26.75122790000023
+  },
+  {
+    "epoch": 13,
+    "train_loss": 0.046360319361999254,
+    "train_seconds": 27.259946800000762,
+    "epoch_total_seconds": 27.25999629999933
+  }
+]

@@ -1,0 +1,202 @@
+{
+  "kind": "ft_transformer",
+  "signature": {
+    "configuration": {
+      "round": "round2",
+      "training_location": "local_only",
+      "seed": 20261121,
+      "max_epochs": 40,
+      "min_epochs": 8,
+      "patience": 7,
+      "benchmark_epochs": 3,
+      "local_suite_budget_minutes": 60,
+      "local_model_budget_minutes": 45,
+      "numeric_transform": "quantile_normal",
+      "models": {
+        "mlp": {
+          "hidden": [
+            256,
+            128,
+            64
+          ],
+          "embedding_dim": 8,
+          "dropout": 0.1,
+          "batch_size": 2048,
+          "lr": 0.001,
+          "weight_decay": 0.0001
+        },
+        "ft_transformer": {
+          "d_block": 64,
+          "n_blocks": 3,
+          "attention_n_heads": 4,
+          "attention_dropout": 0.1,
+          "ffn_dropout": 0.1,
+          "batch_size": 1024,
+          "lr": 0.0003,
+          "weight_decay": 1e-05
+        },
+        "tabm": {
+          "d_block": 128,
+          "n_blocks": 3,
+          "k": 16,
+          "dropout": 0.1,
+          "n_bins": 32,
+          "num_embedding_dim": 8,
+          "batch_size": 1024,
+          "lr": 0.001,
+          "weight_decay": 0.0001
+        }
+      }
+    },
+    "kind": "ft_transformer",
+    "source_sha256": "7bbbff5f9ccc3cd06219e58217acfda5328153b8b55bfbfa01e5dca0a16aa3e8",
+    "versions": {
+      "tabm": "0.0.3",
+      "rtdl-revisiting-models": "0.0.2",
+      "rtdl-num-embeddings": "0.0.12",
+      "numpy": "2.5.5",
+      "scikit-learn": "1.9.1"
+    },
+    "torch": "2.11.0+cu128"
+  },
+  "completed_at": "2026-11-21T10:14:12.527857+00:00",
+  "folds": [
+    {
+      "fold": 0,
+      "selected_epochs": 6,
+      "inner_training_seconds": 175.58239419999882,
+      "refit_training_seconds": 80.47690579999835,
+      "peak_memory_mib": 284.41796875,
+      "parameter_count": 105791,
+      "training_device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "outer_train_rows": 373312,
+      "valid_rows": 186656,
+      "metrics": {
+        "roc_auc": 0.9426572557732823,
+        "average_precision": 0.48877869689128606,
+        "log_loss": 0.047852522739929675,
+        "accuracy": 0.9863760072004114,
+        "precision": 0.8079399141630901,
+        "recall": 0.24157844080846969,
+        "f1": 0.3719436897999506,
+        "threshold": 0.5,
+        "confusion_matrix": [
+          [
+            183360,
+            179
+          ],
+          [
+            2364,
+            753
+          ]
+        ]
+      }
+    },
+    {
+      "fold": 1,
+      "selected_epochs": 16,
+      "inner_training_seconds": 277.72646760000134,
+      "refit_training_seconds": 208.55455040000015,
+      "peak_memory_mib": 284.41796875,
+      "parameter_count": 105791,
+      "training_device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "outer_train_rows": 373312,
+      "valid_rows": 186656,
+      "metrics": {
+        "roc_auc": 0.942975107268893,
+        "average_precision": 0.48818076628017376,
+        "log_loss": 0.0476836787615674,
+        "accuracy": 0.9865206583233328,
+        "precision": 0.8026183282980867,
+        "recall": 0.2556945781199872,
+        "f1": 0.3878345498783455,
+        "threshold": 0.5,
+        "confusion_matrix": [
+          [
+            183343,
+            196
+          ],
+          [
+            2320,
+            797
+          ]
+        ]
+      }
+    },
+    {
+      "fold": 2,
+      "selected_epochs": 13,
+      "inner_training_seconds": 280.5485714999995,
+      "refit_training_seconds": 197.42031169999973,
+      "peak_memory_mib": 284.41796875,
+      "parameter_count": 105791,
+      "training_device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "outer_train_rows": 373312,
+      "valid_rows": 186656,
+      "metrics": {
+        "roc_auc": 0.9433617423944971,
+        "average_precision": 0.4960413019315282,
+        "log_loss": 0.046704133598784316,
+        "accuracy": 0.9865420881193211,
+        "precision": 0.7255779269202088,
+        "recall": 0.3121591273660571,
+        "f1": 0.43651861821444593,
+        "threshold": 0.5,
+        "confusion_matrix": [
+          [
+            183171,
+            368
+          ],
+          [
+            2144,
+            973
+          ]
+        ]
+      }
+    }
+  ],
+  "oof_default": {
+    "roc_auc": 0.9423321174618275,
+    "average_precision": 0.4878938471845442,
+    "log_loss": 0.04741344503342713,
+    "accuracy": 0.9864795845476885,
+    "precision": 0.7725045927740355,
+    "recall": 0.26981071543150464,
+    "f1": 0.39993659348498056,
+    "threshold": 0.5,
+    "confusion_matrix": [
+      [
+        549874,
+        743
+      ],
+      [
+        6828,
+        2523
+      ]
+    ]
+  },
+  "oof_selected_threshold": {
+    "roc_auc": 0.9423321174618275,
+    "average_precision": 0.4878938471845442,
+    "log_loss": 0.04741344503342713,
+    "accuracy": 0.9840598034173381,
+    "precision": 0.5268545431568306,
+    "recall": 0.44583467008876054,
+    "f1": 0.48297034291010194,
+    "threshold": 0.20715276896953583,
+    "confusion_matrix": [
+      [
+        546873,
+        3744
+      ],
+      [
+        5182,
+        4169
+      ]
+    ]
+  },
+  "total_seconds": 1231.562804000001,
+  "mean_fold_auc": 0.9429980351455575,
+  "std_fold_auc": 0.00035280251630893906,
+  "evaluation_scope": "第二轮开发集 OOF；首轮独立测试集已查看，本轮不重复用于调参或选型。"
+}

@@ -1,0 +1,4 @@
+# 先从官方 CUDA 索引安装 torch，再安装其余两项，见 scripts/setup_neural.ps1。
+torch==2.11.0
+tabm==0.0.3
+rtdl-revisiting-models>=0.0.2,<0.1

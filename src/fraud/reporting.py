@@ -87,7 +87,11 @@ def run():
     final = holdout["selected"]["oof_threshold"]
     heading("一 课题综述")
     heading("1 课题简介", 2)
-    para(f"本项目参加 Kaggle Playground Series S6E11 信用卡欺诈预测比赛，并完成机器学习课程项目 2 的分类实验。模型根据交易金额、账户状态、商户风险、验证方式及行为标记等特征，预测交易为欺诈的概率。我们在统一数据划分下比较逻辑回归、决策树、XGBoost 与 CatBoost，再通过参数优化、特征工程及融合选择提升预测表现。按开发集选择的方案为 {chosen}，独立测试集 ROC-AUC 为 {final['roc_auc']:.6f}。")
+    para(f"本项目参加 Kaggle Playground Series S6E11 信用卡欺诈预测比赛，并完成机器学习课程项目 2 的分类实验。模型根据交易金额、账户状态、商户风险、验证方式及行为标记等特征，预测交易为欺诈的概率。我们在统一数据划分下比较逻辑回归、决策树、XGBoost 与 CatBoost，再通过参数优化、特征工程及融合选择提升预测表现。首轮按开发集选择的方案为 {chosen}，独立测试集 ROC-AUC 为 {final['roc_auc']:.6f}。")
+    round2_path = ROOT / "reports/round2/selection.json"
+    if round2_path.exists():
+        round2 = json.loads(round2_path.read_text(encoding="utf-8"))
+        para(f"第二轮进一步加入 MLP、FT-Transformer 和 TabM，比较神经网络与树模型的互补性。本轮所选方案的开发集 OOF AUC 为 {round2['oof_metrics']['roc_auc']:.6f}；本轮沿用开发集选型，首轮独立测试成绩保留。")
     heading("2 课题目标", 2)
     para("比赛以 ROC-AUC 为主要指标；课程实验同时考察类别不平衡下的精确率、召回率和 F1，分析不同分类方法的适用条件。实验目标包括可复现的数据预处理、公平的模型比较、至少一种模型的优化，以及真实类别与预测类别的可视化分析。")
     heading("3 课题数据集", 2)
@@ -140,9 +144,14 @@ def run():
     heading("6 拓展探索", 2)
     para("本轮拓展包括超参数分析、无标签组合特征、交叉拟合目标编码、模型融合及特征重要性分析。后续可在开发集研究交互目标编码和原始数据源辅助特征，通过消融实验检查收益；新一轮选择须与本轮独立测试结果的使用历史一起记录。")
     figure("feature_importance", "图 7 所选方案成员模型的特征重要性")
+    if round2_path.exists():
+        from .neural_reporting import append_blocks
+        append_blocks(blocks)
     heading("三 实验总结")
-    para(f"本项目完成了信用卡欺诈二分类的数据分析、四类模型基线、GPU 树提升训练、超参数优化、特征工程、融合选择和独立测试。最终方案测试 ROC-AUC={final['roc_auc']:.6f}，AP={final['average_precision']:.6f}。类别严重不平衡时，应结合风险排序和少数类识别指标评价模型，避免高准确率掩盖漏检。")
+    para(f"本项目完成了信用卡欺诈二分类的数据分析、四类模型基线、GPU 树提升训练、超参数优化、特征工程、融合选择和独立测试。首轮方案测试 ROC-AUC={final['roc_auc']:.6f}，AP={final['average_precision']:.6f}。类别严重不平衡时，应结合风险排序和少数类识别指标评价模型，避免高准确率掩盖漏检。")
     para("完成独立测试后，按开发集交叉验证得到的训练轮数，在全部官方有标签数据上重训所选方案，并生成与官方样例列名及 id 顺序一致的提交文件。当前材料记录本地实验结果；Kaggle 上传与线上评分状态单独保存，不能以本地 AUC 代替线上成绩。")
+    if round2_path.exists():
+        para(f"加入三种神经网络后，第二轮开发集 OOF AUC 为 {round2['oof_metrics']['roc_auc']:.6f}，相对首轮融合变化 {round2['auc_improvement']:+.6f}。各网络及融合的预测、训练耗时与持久化模型均保留，可据此继续比较精度和计算成本。")
     heading("参考资料")
     for text in [
         "[1] Kaggle. Predicting Credit Card Fraud. https://www.kaggle.com/competitions/playground-series-s6e11",
@@ -152,6 +161,7 @@ def run():
         "[5] Optuna. Documentation. https://optuna.readthedocs.io/",
         "[6] scikit-learn. TargetEncoder and internal cross fitting. https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.TargetEncoder.html",
         "[7] JamesAyCheese. Credit Card Fraud Detection Kaggle Playground S6E11. https://github.com/jamesaycheese/kaggle-credit-card-fraud",
+        *(["[8] Gorishniy et al. Revisiting Deep Learning Models for Tabular Data. https://github.com/yandex-research/rtdl-revisiting-models", "[9] Gorishniy et al. TabM Advancing Tabular Deep Learning With Parameter Efficient Ensembling. https://github.com/yandex-research/tabm"] if round2_path.exists() else []),
     ]: para(text)
     write_json(ROOT / "reports/report_content.json", blocks)
     markdown = []

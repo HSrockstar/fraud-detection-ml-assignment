@@ -1,0 +1,57 @@
+{
+  "verified_at": "2026-11-21T09:42:55.774362+00:00",
+  "models": {
+    "cat_baseline": {
+      "rows": 256,
+      "inference_seconds": 0.2682879000021785,
+      "max_absolute_difference_from_cache": 0.0,
+      "training_scope": "dev_only"
+    },
+    "logistic_baseline": {
+      "rows": 256,
+      "inference_seconds": 0.1812458999993396,
+      "max_absolute_difference_from_cache": 0.0,
+      "training_scope": "dev_only"
+    },
+    "tree_baseline": {
+      "rows": 256,
+      "inference_seconds": 0.01691209999989951,
+      "max_absolute_difference_from_cache": 0.0,
+      "training_scope": "dev_only"
+    },
+    "xgb_baseline": {
+      "rows": 256,
+      "inference_seconds": 0.059985199997754535,
+      "max_absolute_difference_from_cache": 0.0,
+      "training_scope": "dev_only"
+    },
+    "xgb_engineered": {
+      "rows": 256,
+      "inference_seconds": 0.05177860000185319,
+      "max_absolute_difference_from_cache": 0.0,
+      "training_scope": "dev_only"
+    },
+    "xgb_target_encoded": {
+      "rows": 256,
+      "inference_seconds": 0.04147699999884935,
+      "max_absolute_difference_from_cache": 0.0,
+      "training_scope": "dev_only"
+    },
+    "xgb_tuned": {
+      "rows": 256,
+      "inference_seconds": 0.028765999999450287,
+      "max_absolute_difference_from_cache": 0.0,
+      "training_scope": "dev_only"
+    },
+    "selected": {
+      "rows": 256,
+      "inference_seconds": 0.30976490000102785,
+      "max_absolute_difference_from_cache": 0.0,
+      "weights": {
+        "xgb_target_encoded": 0.7000000000000001,
+        "cat_baseline": 0.29999999999999993
+      }
+    }
+  },
+  "timing_note": "同机单次 256 条 CPU 推理，包含预处理，不含模型载入及训练；融合时间为其组成模型时间之和。"
+}

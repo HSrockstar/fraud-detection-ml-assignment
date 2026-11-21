@@ -1,0 +1,15 @@
+{
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.11.0+cu128",
+  "torch_cuda": "12.8",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU, 8188 MiB, 581.08",
+  "packages": {
+    "tabm": "0.0.3",
+    "rtdl-revisiting-models": "0.0.2",
+    "rtdl-num-embeddings": "0.0.12",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+  }
+}

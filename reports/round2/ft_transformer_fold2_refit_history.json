@@ -1,0 +1,80 @@
+[
+  {
+    "epoch": 1,
+    "train_loss": 0.09446865155687467,
+    "train_seconds": 17.2371619000005,
+    "epoch_total_seconds": 17.237202600001183
+  },
+  {
+    "epoch": 2,
+    "train_loss": 0.052626064541857746,
+    "train_seconds": 18.673817099999724,
+    "epoch_total_seconds": 18.673849099999643
+  },
+  {
+    "epoch": 3,
+    "train_loss": 0.04923094342835216,
+    "train_seconds": 17.432004700000107,
+    "epoch_total_seconds": 17.432045900000958
+  },
+  {
+    "epoch": 4,
+    "train_loss": 0.04822089164023659,
+    "train_seconds": 16.44339570000011,
+    "epoch_total_seconds": 16.443438199999946
+  },
+  {
+    "epoch": 5,
+    "train_loss": 0.047731956404763305,
+    "train_seconds": 15.055850599997939,
+    "epoch_total_seconds": 15.05588859999989
+  },
+  {
+    "epoch": 6,
+    "train_loss": 0.04751082560465509,
+    "train_seconds": 14.462737099998776,
+    "epoch_total_seconds": 14.46276979999675
+  },
+  {
+    "epoch": 7,
+    "train_loss": 0.04730347558643976,
+    "train_seconds": 13.79394350000075,
+    "epoch_total_seconds": 13.793974600001093
+  },
+  {
+    "epoch": 8,
+    "train_loss": 0.04732417815058182,
+    "train_seconds": 13.186988699999347,
+    "epoch_total_seconds": 13.187028799999098
+  },
+  {
+    "epoch": 9,
+    "train_loss": 0.04699226221130047,
+    "train_seconds": 13.346856999996817,
+    "epoch_total_seconds": 13.346884299997328
+  },
+  {
+    "epoch": 10,
+    "train_loss": 0.04707432954037106,
+    "train_seconds": 13.336717100002716,
+    "epoch_total_seconds": 13.336741600000096
+  },
+  {
+    "epoch": 11,
+    "train_loss": 0.04708628962670635,
+    "train_seconds": 13.75049399999989,
+    "epoch_total_seconds": 13.750533800000994
+  },
+  {
+    "epoch": 12,
+    "train_loss": 0.04697432731368132,
+    "train_seconds": 13.76366589999816,
+    "epoch_total_seconds": 13.763704799999687
+  },
+  {
+    "epoch": 13,
+    "train_loss": 0.046751731586112955,
+    "train_seconds": 13.37730559999909,
+    "epoch_total_seconds": 13.377349999998842
+  }
+]

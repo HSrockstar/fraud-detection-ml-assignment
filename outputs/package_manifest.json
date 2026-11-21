@@ -1,8 +1,8 @@
 {
   "file": "分类作业_胡懿晨_2452273_董熙远_2452060_张哲豪_2453780_张梓桑_2451982.zip",
-  "bytes": 1974772,
-  "sha256": "d2ed18ed384bc7e00e4c18a14279c42437d74ca6330118a3351248d52bc84840",
-  "files": 69,
-  "data_recovery": "按 README 使用 Kaggle API 下载官方原始数据，再运行 scripts/run.py all 重建模型与评估。",
+  "bytes": 2405692,
+  "sha256": "f7a2949938ab58f32c0404ba662c1887b011f7220d0d04ab1eaa1842d86cc278",
+  "files": 133,
+  "data_recovery": "按 README 下载原始数据，运行 scripts/run.py all 重建首轮，再按第二轮步骤训练神经网络、融合并核验。",
   "contributions": "按用户要求留白，正式提交前需补齐。"
 }

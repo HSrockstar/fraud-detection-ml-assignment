@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-11-21T10:35:20.309631+00:00",
+  "passed": true,
+  "checks": [
+    "首轮数据划分、OOF、留出集成绩和提交文件校验值保持一致",
+    "融合权重、开发集 OOF 对齐、选型指标和最终模型清单一致",
+    "mlp: GPU 训练、OOF覆盖、指标复算、首折完整重载推理通过",
+    "ft_transformer: GPU 训练、OOF覆盖、指标复算、首折完整重载推理通过",
+    "tabm: GPU 训练、OOF覆盖、指标复算、首折完整重载推理通过",
+    "全部比赛测试样本的提交格式、概率和重载融合推理通过"
+  ],
+  "fold_reload_max_errors": {
+    "mlp": 0.0,
+    "ft_transformer": 0.0,
+    "tabm": 0.0
+  },
+  "submission_reload_max_error": 2.220446049250313e-16,
+  "rows": 299984
+}

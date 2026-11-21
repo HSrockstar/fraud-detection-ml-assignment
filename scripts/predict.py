@@ -17,12 +17,24 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input",type=Path,required=True)
     parser.add_argument("--output",type=Path,required=True)
+    parser.add_argument("--round",choices=["round1","round2"],default="round1")
     args=parser.parse_args()
     if args.input.resolve() == args.output.resolve():
         raise ValueError("输入与输出路径必须不同")
+    frame=pd.read_csv(args.input)
+    if args.round=="round2":
+        from fraud.neural_finalize import predict_submission
+        probability=predict_submission(frame)
+        if not np.isfinite(probability).all() or ((probability<0)|(probability>1)).any():
+            raise ValueError("预测概率无效")
+        if not frame["id"].is_unique or frame["id"].isna().any():
+            raise ValueError("输入 id 必须无缺失且唯一")
+        args.output.parent.mkdir(parents=True,exist_ok=True)
+        pd.DataFrame({"id":frame["id"],"is_fraud":probability}).to_csv(args.output,index=False)
+        print(f"已生成第二轮 {len(frame):,} 条预测：{args.output.resolve()}")
+        return
     folder=ROOT / "artifacts/final"
     metadata=json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
-    frame=pd.read_csv(args.input)
     required=[metadata["id_column"]]+metadata["feature_columns"]
     missing=set(required)-set(frame.columns)
     if missing:
