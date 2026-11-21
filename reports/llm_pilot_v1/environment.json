@@ -1,0 +1,19 @@
+{
+  "python": "3.12.13",
+  "packages": {
+    "numpy": "2.5.5",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.9.1",
+    "python-dotenv": "1.2.4"
+  },
+  "source_sha256": {
+    "prompts/llm_fraud_zh.txt": "1af3740c42dcbe6dd20ffe168b65708adcd0d69d720ef6be8e54fda02e584e3b",
+    "configs/llm_pilot.json": "aa9894ea19c0711f7e4c9fac1745e4c46007c5ebf0f75d0170781798cd954fa8",
+    "scripts/prepare_llm_pilot.py": "f86f490aedb652dc03cf3bb3ef100b256c2a4f9a0f92b2b45a9b09e9cba97971",
+    "scripts/run_llm_pilot.py": "1e78572cdb2dbf90c1caf53bef85cdc87e45052365e9bc49e171b3fd534d43f2",
+    "src/fraud/llm_pilot.py": "ea65bc08fc272d360606fbfa5d7eed1be2f30544254fb1810252bdb16109218e",
+    "tests/test_llm_pilot.py": "298f0bfdca32268330916b41955031b61bdc7c430ccd07b529a98e4cf8c1ed9f"
+  },
+  "credentials_recorded": false,
+  "transport": "Python 标准库 urllib；不自动重试付费请求"
+}

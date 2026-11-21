@@ -1,0 +1,17 @@
+{
+  "verified_at": "2026-11-21T10:05:21.933129+00:00",
+  "passed": true,
+  "validated_rows": 256,
+  "completed_prediction_batches": 8,
+  "paid_model_calls_including_incomplete": 9,
+  "frozen_request_hashes_unchanged": true,
+  "retry_only_changed_max_output_tokens": true,
+  "all_returned_models_and_reasoning_verified": true,
+  "api_predictions_match_export": true,
+  "labels_match_raw_train": true,
+  "baseline_predictions_match_original_holdout_cache": true,
+  "auc_verified_by_pairwise_comparison": true,
+  "weighted_ap_and_log_loss_recomputed": true,
+  "incomplete_usage_included": true,
+  "estimated_standard_usd": 2.1173264
+}

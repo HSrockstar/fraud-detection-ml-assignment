@@ -1,0 +1,17 @@
+{
+  "experiment": "llm_pilot_v1",
+  "model": "gpt-6.2-sol",
+  "reasoning_effort": "xhigh",
+  "seed": 20261121,
+  "training_examples": {"0": 384, "1": 128},
+  "evaluation_examples": {"0": 192, "1": 64},
+  "batch_size": 32,
+  "numeric_quantile_bins": 8,
+  "smoothing_strength": 20,
+  "prompt_path": "prompts/llm_fraud_zh.txt",
+  "artifact_dir": "artifacts/llm_pilot_v1",
+  "training_partition": "dev",
+  "evaluation_partition": "holdout",
+  "evaluation_note": "既有留出集上的分层富集小样本；以 AUC 为主，其他总体指标须按抽样概率加权。不是新的未见测试集，也不是 Kaggle 线上成绩。",
+  "api_calls_require_prompt_approval": true
+}

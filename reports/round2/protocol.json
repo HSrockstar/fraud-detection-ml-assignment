@@ -1,0 +1,23 @@
+{
+  "reports/holdout_metrics.json": {
+    "sha256": "20d94bedca1f4e6d27cbab440ce6f43a7d613dad8d80a5f8d9255bff2d0f4f83",
+    "bytes": 8847
+  },
+  "reports/selection.json": {
+    "sha256": "5f16fae8b5a37d57a45ea83ebffaa95c8721af43db223b9ba196193264a2acec",
+    "bytes": 7261
+  },
+  "artifacts/splits.parquet": {
+    "sha256": "57cb472056f9a8f726a9f6a2fce61a9133304bacbe3cfb225bd9febe7e0ec6c2",
+    "bytes": 3363459
+  },
+  "artifacts/selected_oof.parquet": {
+    "sha256": "b34c3003a6cd9821e7b7cceaeb3c4cd2ae8102ae56d186ed723c8d88a6da48d2",
+    "bytes": 7297249
+  },
+  "submissions/round1_best.csv": {
+    "sha256": "c42a50929f44a9c688960ca034ce4b5ae8d9e9967bd2164bc341b0674a0a6e9b",
+    "bytes": 8852669
+  },
+  "protocol": "第二轮仅使用原开发集固定三折，首轮独立测试集不重复选型；保留以上首轮结果。"
+}

@@ -64,10 +64,11 @@ XGBoost 和 CatBoost 必须通过实际 GPU 训练自检。正式实验遇到 GP
 | `data/raw/` | 官方原始 CSV 与下载压缩包，不加入 Git |
 | `artifacts/` | 持久化划分、模型、OOF 和最终测试预测，不加入 Git |
 | `reports/` | 实际成绩、分析图、环境与数据校验记录、实验报告 |
-| `submissions/round1_best.csv` | 本轮所选方案的比赛提交文件 |
+| `submissions/round1_best.csv` | 首轮所选方案的比赛提交文件 |
+| `submissions/round2_best.csv` | 加入三种神经网络比较后的第二轮提交文件 |
 | `作业要求/` | 教师原始要求和模板，保留原件 |
 
-机器可读的最终结果见 `reports/model_comparison.csv`、`reports/holdout_metrics.json`、`reports/selection.json` 和 `reports/verification.json`。报告保留模板章节并改为分类任务；组员分工按用户要求暂时留白。
+首轮结果见 `reports/model_comparison.csv`、`reports/holdout_metrics.json`、`reports/selection.json` 和 `reports/verification.json`；第二轮结果另存于 `reports/round2/`。报告保留模板章节并改为分类任务；组员分工按用户要求暂时留白。
 
 Word 报告根据 `reports/report_content.json` 和教师 DOCX 模板生成。需要重建时，在具备 `requirements-docs.txt` 中可选依赖的 Python 中运行 `scripts/build_docx.py`；本次交付使用 Codex 文档运行时构建并渲染核验。报告与代码的课程要求对应关系见 `docs/作业要求核对.md`。提交前须补齐当前按要求留白的分工栏。
 
@@ -81,6 +82,36 @@ Word 报告根据 `reports/report_content.json` 和教师 DOCX 模板生成。�
 .\.venv\Scripts\python.exe scripts/predict.py --input data/raw/test.csv --output submissions/predictions_reloaded.csv
 ```
 
+## 第二轮神经网络与融合
+
+第二轮保留首轮冻结结果，依次训练 MLP、FT-Transformer 和 TabM，使用相同开发集三折。只在训练折内部早停，再重训整个训练折；连续特征的分位数变换、类别词表和 TabM 分箱都仅从对应训练数据拟合。
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/setup_neural.ps1
+.\.venv\Scripts\python.exe scripts/run_neural.py benchmark
+.\.venv\Scripts\python.exe scripts/run_neural.py train --model mlp
+.\.venv\Scripts\python.exe scripts/run_neural.py train --model ft_transformer
+.\.venv\Scripts\python.exe scripts/run_neural.py train --model tabm
+.\.venv\Scripts\python.exe scripts/run_neural.py blend
+.\.venv\Scripts\python.exe scripts/run_neural.py finalize
+.\.venv\Scripts\python.exe scripts/run_neural.py verify
+.\.venv\Scripts\python.exe scripts/run_neural.py report
+```
+
+`benchmark` 在完整内部训练折上实测三个 epoch，舍弃第一轮计时热身；按最大轮数、三折早停与重训、全量最终模型，再加 25% 余量，估算整套时间。按用户最新要求，全部训练固定使用本机 RTX 4060，不使用远程服务器。配置中的 60 分钟整套预算和 45 分钟单模型预算仅用于对照估计，超过预算仍在本机继续；训练支持按已完成折恢复。
+
+配置见 `configs/neural_round2.json`；训练使用 BF16 混合精度，分类预测使用 FP32。TabM 采用官方库，成员先分别转换为概率再平均；FT-Transformer 采用官方推荐实现。第二轮结果和逐轮记录写入 `reports/round2/`，模型与 OOF 写入 `artifacts/round2/`，提交文件为 `submissions/round2_best.csv`。
+
+`reports/round2/all_models_comparison.csv` 汇总首轮传统分类器、树提升、三种网络和融合的相同开发集 OOF 指标；`model_comparison.csv` 只展示本轮四路输入及所选融合。网络三折记录同时保存折间 AUC 标准差与实际耗时。
+
+四路融合比较首轮树融合与三种网络，非负权重步长 0.1。只有 OOF AUC 至少提升 0.00005 且至少两折提升才替换原方案。第二轮分数用于开发集选型，旧独立测试集不反复用于调参或宣称新的独立测试成绩。
+
+第二轮最终模型可重载推理：
+
+```powershell
+.\.venv\Scripts\python.exe scripts/predict.py --round round2 --input data/raw/test.csv --output submissions/round2_reloaded.csv
+```
+
 ## 资料
 
 - [比赛与数据](https://www.kaggle.com/competitions/playground-series-s6e11)
@@ -88,3 +119,5 @@ Word 报告根据 `reports/report_content.json` 和教师 DOCX 模板生成。�
 - [XGBoost GPU](https://xgboost.readthedocs.io/en/stable/gpu/index.html)
 - [CatBoost GPU](https://catboost.ai/docs/en/features/training-on-gpu)
 - [Optuna](https://optuna.readthedocs.io/)
+- [FT-Transformer 官方实现](https://github.com/yandex-research/rtdl-revisiting-models)
+- [TabM 官方实现](https://github.com/yandex-research/tabm)

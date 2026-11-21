@@ -1,0 +1,36 @@
+{
+  "completed_at": "2026-11-21T10:33:32.537596+00:00",
+  "weights": {
+    "tree_round1": 0.9,
+    "tabm": 0.1
+  },
+  "epochs": {
+    "mlp": 4,
+    "ft_transformer": 13,
+    "tabm": 12
+  },
+  "training": {
+    "mlp": {
+      "training_seconds": 29.211180300000706,
+      "peak_memory_mib": 135.83447265625,
+      "parameter_count": 57793,
+      "training_device": "NVIDIA GeForce RTX 4060 Laptop GPU"
+    },
+    "ft_transformer": {
+      "training_seconds": 339.6553292999997,
+      "peak_memory_mib": 320.537109375,
+      "parameter_count": 105791,
+      "training_device": "NVIDIA GeForce RTX 4060 Laptop GPU"
+    },
+    "tabm": {
+      "training_seconds": 146.55949409999812,
+      "peak_memory_mib": 204.55712890625,
+      "parameter_count": 84032,
+      "training_device": "NVIDIA GeForce RTX 4060 Laptop GPU"
+    }
+  },
+  "submission": "submissions/round2_best.csv",
+  "rows": 299984,
+  "kaggle_status": "仅生成文件，未上传 Kaggle。",
+  "evaluation_scope": "开发集选型分数，存在选择偏差；本轮未使用旧独立测试集重复选参或声称新的独立测试成绩。"
+}

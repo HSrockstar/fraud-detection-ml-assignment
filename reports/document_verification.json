@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "pages": 10,
+  "pages": 13,
   "visually_reviewed_pages": [
     1,
     2,
@@ -11,15 +11,20 @@
     7,
     8,
     9,
-    10
+    10,
+    11,
+    12,
+    13
   ],
-  "docx_sha256": "5d7769d8d1d9e6af31ac65138719ad67ffd81a65b373ad3253555643eb648ea6",
+  "docx_sha256": "5a22c7d6f6821c87ec011d2652494151dfc8c4e35eeb497e9bce4615b86236ac",
   "template_sha256": "4b6dccd77acfe138ec94b89c88e0ec1730d2e65c55b5b46c5f94cc1cafac1957",
   "template_structure": {
     "original_styles_preserved": true,
     "section_geometry_preserved": true,
-    "figure_count": 7
+    "figure_count": 9,
+    "preserve_only_parts_unchanged": true
   },
+  "renderer": "Microsoft Word 16.0 read-only PDF export; bundled render_docx.py rasterizer",
   "python": "3.12.14",
   "packages": {
     "python-docx": "1.2.0",
@@ -27,8 +32,8 @@
     "Pillow": "13.0.0"
   },
   "notes": [
-    "逐页检查中文、表格、图表和分页",
+    "已逐页检查全部13页，中文、数字、表格和图表无截断或重叠",
     "四人姓名学号齐全，分工按用户要求留白",
-    "10 页，满足 15 页以内建议"
+    "报告与源模板均使用Word渲染对照；原件未修改"
   ]
 }

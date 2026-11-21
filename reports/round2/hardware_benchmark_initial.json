@@ -1,0 +1,182 @@
+{
+  "started_at": "2026-11-21T09:38:47.849198+00:00",
+  "environment": {
+    "python": "3.12.13",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.11.0+cu128",
+    "torch_cuda": "12.8",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU, 8188 MiB, 581.08",
+    "packages": {
+      "tabm": "0.0.3",
+      "rtdl-revisiting-models": "0.0.2",
+      "rtdl-num-embeddings": "0.0.12",
+      "numpy": "2.5.5",
+      "scikit-learn": "1.9.1"
+    }
+  },
+  "configuration": {
+    "round": "round2",
+    "seed": 20261121,
+    "max_epochs": 40,
+    "min_epochs": 8,
+    "patience": 7,
+    "benchmark_epochs": 3,
+    "local_suite_budget_minutes": 60,
+    "local_model_budget_minutes": 45,
+    "numeric_transform": "quantile_normal",
+    "models": {
+      "mlp": {
+        "hidden": [
+          256,
+          128,
+          64
+        ],
+        "embedding_dim": 8,
+        "dropout": 0.1,
+        "batch_size": 2048,
+        "lr": 0.001,
+        "weight_decay": 0.0001
+      },
+      "ft_transformer": {
+        "d_block": 64,
+        "n_blocks": 3,
+        "attention_n_heads": 4,
+        "attention_dropout": 0.1,
+        "ffn_dropout": 0.1,
+        "batch_size": 1024,
+        "lr": 0.0003,
+        "weight_decay": 1e-05
+      },
+      "tabm": {
+        "d_block": 128,
+        "n_blocks": 3,
+        "k": 16,
+        "dropout": 0.1,
+        "n_bins": 32,
+        "num_embedding_dim": 8,
+        "batch_size": 1024,
+        "lr": 0.001,
+        "weight_decay": 0.0001
+      }
+    }
+  },
+  "scope": "仅开发集第0训练折内部训练/早停数据；完整样本量短测。首轮留出集不参与。",
+  "models": {
+    "mlp": {
+      "passed": true,
+      "full_inner_train_rows": 335980,
+      "early_rows": 37332,
+      "steady_epoch_seconds": 2.005671099999745,
+      "estimated_full_cv_and_final_minutes": 15.40261558124502,
+      "peak_memory_mib": 79.1865234375,
+      "parameters": 57793,
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_loss": 0.08621791801223287,
+          "train_seconds": 2.80625279999731,
+          "valid_auc": 0.9303040043320189,
+          "valid_ap": 0.4117683271560129,
+          "epoch_total_seconds": 2.9827000000004773
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.05154092133460325,
+          "train_seconds": 1.9359086999975261,
+          "valid_auc": 0.937717523009805,
+          "valid_ap": 0.46157720327844737,
+          "epoch_total_seconds": 1.9838954000006197
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.04958338410210429,
+          "train_seconds": 1.9831725000003644,
+          "valid_auc": 0.9386169005138544,
+          "valid_ap": 0.4582054689527779,
+          "epoch_total_seconds": 2.02744679999887
+        }
+      ],
+      "estimate_max_epochs": 40,
+      "estimate_safety_factor": 1.25
+    },
+    "ft_transformer": {
+      "passed": true,
+      "full_inner_train_rows": 335980,
+      "early_rows": 37332,
+      "steady_epoch_seconds": 13.410413850000623,
+      "estimated_full_cv_and_final_minutes": 94.48820335588883,
+      "peak_memory_mib": 282.38916015625,
+      "parameters": 105791,
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_loss": 0.07499741311796833,
+          "train_seconds": 12.419740099998307,
+          "valid_auc": 0.9329767101957187,
+          "valid_ap": 0.4621762486871767,
+          "epoch_total_seconds": 12.738423499999044
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.05047241697794511,
+          "train_seconds": 12.72865400000228,
+          "valid_auc": 0.9395461865777293,
+          "valid_ap": 0.4736648672239033,
+          "epoch_total_seconds": 13.04785450000054
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.04859637815587981,
+          "train_seconds": 13.45570950000183,
+          "valid_auc": 0.939809220118124,
+          "valid_ap": 0.4761062186490785,
+          "epoch_total_seconds": 13.772973200000706
+        }
+      ],
+      "estimate_max_epochs": 40,
+      "estimate_safety_factor": 1.25
+    },
+    "tabm": {
+      "passed": true,
+      "full_inner_train_rows": 335980,
+      "early_rows": 37332,
+      "steady_epoch_seconds": 4.5135693499996705,
+      "estimated_full_cv_and_final_minutes": 32.117824375009526,
+      "peak_memory_mib": 165.939453125,
+      "parameters": 84032,
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_loss": 0.09193688054348473,
+          "train_seconds": 4.394231300000683,
+          "valid_auc": 0.9279803628441763,
+          "valid_ap": 0.37949980880177986,
+          "epoch_total_seconds": 4.5006715999988955
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.05369370130848562,
+          "train_seconds": 4.278501900000265,
+          "valid_auc": 0.9379396071842983,
+          "valid_ap": 0.457821169658927,
+          "epoch_total_seconds": 4.377532200000132
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.049670750956158104,
+          "train_seconds": 4.541852700000163,
+          "valid_auc": 0.9396921875737192,
+          "valid_ap": 0.47782826174361986,
+          "epoch_total_seconds": 4.649606499999209
+        }
+      ],
+      "estimate_max_epochs": 40,
+      "estimate_safety_factor": 1.25
+    }
+  },
+  "estimated_suite_minutes": 142.00864331214336,
+  "local_eligible": false,
+  "decision": "remote_5090",
+  "completed_at": "2026-11-21T09:40:04.678208+00:00"
+}
