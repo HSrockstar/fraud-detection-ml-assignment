@@ -8,6 +8,7 @@ kaggle.json
 data/raw/
 data/original/
 data/processed/
+data/external/
 artifacts/
 submissions/*.csv
 catboost_info/

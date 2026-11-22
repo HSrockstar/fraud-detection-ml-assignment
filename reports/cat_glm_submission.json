@@ -1,0 +1,42 @@
+{
+  "xgb": "xgb_r2_parts_smooth80",
+  "cat": "cat_r3_glm_parts",
+  "xgb_weight": 0.5,
+  "cat_weight": 0.5,
+  "xgb_fixed_iterations": 410,
+  "cat_fixed_iterations": 819,
+  "cat_fold_iterations": [
+    819,
+    873,
+    727
+  ],
+  "oof_auc": 0.9483403734508842,
+  "selection": "开发集折外预测上，深度 3 与 GLM CatBoost 按 0.1 步长搜索，0.5/0.5 最高。独立测试集不参与选型。",
+  "rows": 299984,
+  "probability_min": 1.7043238218989377e-06,
+  "probability_max": 0.9993389017397722,
+  "file": "submissions/xgb_cat_glm_50_50.csv",
+  "trained_on": "all_official_labeled_data",
+  "holdout_used_for_selection": false,
+  "uploaded": true,
+  "created_at": "2026-11-22T04:32:20.539589+00:00",
+  "kaggle_submission": {
+    "competition": "playground-series-s6e11",
+    "reference": 58702109,
+    "file": "submissions/xgb_cat_glm_50_50.csv",
+    "description": "xgb parts depth3 0.5 cat glm parts 0.5",
+    "submitted_at": "2026-11-22T04:32:41.263000",
+    "status": "COMPLETE",
+    "public_score": 0.9512,
+    "private_score": null,
+    "became_team_best": false,
+    "team_best_public_score": 0.95132,
+    "team_best_file": "submissions/xgb_cat_parts_70_30.csv",
+    "public_leaderboard_rank": 920,
+    "public_leaderboard_teams": 2628,
+    "score_would_rank": 963,
+    "team_name": "Atlantic7931",
+    "daily_submissions_remaining_after_submit": 9,
+    "leaderboard_checked_at": "2026-11-22T04:34:00"
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "source": "https://www.kaggle.com/datasets/alexchilton/s6e11-oof-predictions",
+  "license": "CC0-1.0",
+  "author_note": "作者写明这些折外预测可以用来融合，不必再训练。行顺序与官方 train.csv、test.csv 一致。",
+  "selection": "只在我们的开发集上比较名次平均。20% 留出集和公开榜都不参与选权重。",
+  "ours_dev_auc": 0.9478163587782216,
+  "members_scored": 40,
+  "strongest_public_on_our_dev": {
+    "name": "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds",
+    "key": "4188470eded4cdec",
+    "published_oof_auc": null,
+    "dev_auc": 0.9497596206987069,
+    "spearman_vs_ours": 0.9743780617365817
+  },
+  "selected_members": [
+    "ours_7_3",
+    "LightGBM 4 leaves boosted from the joint GLM, full refit",
+    "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds"
+  ],
+  "selected_weights": [
+    0.1,
+    0.4,
+    0.5
+  ],
+  "selected_dev_auc": 0.9500308117905348,
+  "delta_vs_ours": 0.0022144530123132666,
+  "history": [
+    {
+      "members": [
+        "ours_7_3"
+      ],
+      "weights": [
+        1.0
+      ],
+      "dev_auc": 0.9478163587782216
+    },
+    {
+      "members": [
+        "ours_7_3",
+        "LightGBM 4 leaves boosted from the joint GLM, full refit"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "dev_auc": 0.9498740819829549
+    },
+    {
+      "members": [
+        "ours_7_3",
+        "LightGBM 4 leaves boosted from the joint GLM, full refit",
+        "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds"
+      ],
+      "weights": [
+        0.1,
+        0.4,
+        0.5
+      ],
+      "dev_auc": 0.9500308117905348
+    }
+  ],
+  "public_members": [
+    {
+      "name": "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds",
+      "key": "4188470eded4cdec",
+      "published_oof_auc": null,
+      "dev_auc": 0.9497596206987069,
+      "spearman_vs_ours": 0.9743780617365817
+    },
+    {
+      "name": "XGBoost depth 2, Part 3 recipe, 5 encoder seeds, full refit",
+      "key": "82e9a79659bdf9d8",
+      "published_oof_auc": null,
+      "dev_auc": 0.9496700258908102,
+      "spearman_vs_ours": 0.9748359066443165
+    },
+    {
+      "name": "LightGBM 4 leaves boosted from the joint GLM, full refit",
+      "key": "3d3b857be7461ed5",
+      "published_oof_auc": null,
+      "dev_auc": 0.9496538892795114,
+      "spearman_vs_ours": 0.9692120406830729
+    },
+    {
+      "name": "LightGBM 3 leaves, Part 5 recipe",
+      "key": "21b4d1316c55b429",
+      "published_oof_auc": null,
+      "dev_auc": 0.9496334527505884,
+      "spearman_vs_ours": 0.9718896767732816
+    },
+    {
+      "name": "XGBoost depth 2 boosted from the joint GLM, full refit",
+      "key": "00107284da228571",
+      "published_oof_auc": null,
+      "dev_auc": 0.9495254020619286,
+      "spearman_vs_ours": 0.9699807657297976
+    },
+    {
+      "name": "LightGBM 4 leaves, Part 3 recipe",
+      "key": "ff71516344a5cf6a",
+      "published_oof_auc": null,
+      "dev_auc": 0.949464545297398,
+      "spearman_vs_ours": 0.9716525742624711
+    },
+    {
+      "name": "XGBoost depth 2, Part 3 recipe",
+      "key": "55b2e2d2f9b615b9",
+      "published_oof_auc": null,
+      "dev_auc": 0.9494516729294429,
+      "spearman_vs_ours": 0.9718200893370853
+    },
+    {
+      "name": "Joint GLM, full refit",
+      "key": "29b8383a5886512b",
+      "published_oof_auc": null,
+      "dev_auc": 0.9492130115267642,
+      "spearman_vs_ours": 0.9708162099103198
+    },
+    {
+      "name": "LightGBM 4 leaves digits + GPT-2 tokens",
+      "key": "f9c597c5e452c78b",
+      "published_oof_auc": null,
+      "dev_auc": 0.9486703576303435,
+      "spearman_vs_ours": 0.9676722579310548
+    },
+    {
+      "name": "XGBoost depth 2 digits",
+      "key": "59abebeed6b8fa2d",
+      "published_oof_auc": null,
+      "dev_auc": 0.9486321792678194,
+      "spearman_vs_ours": 0.9673727859047667
+    },
+    {
+      "name": "LightGBM 4 leaves digits",
+      "key": "37984c74f5880f09",
+      "published_oof_auc": null,
+      "dev_auc": 0.9486246308386127,
+      "spearman_vs_ours": 0.9681280903411866
+    },
+    {
+      "name": "LightGBM 4 leaves digits s100",
+      "key": "9d26cfb564230caa",
+      "published_oof_auc": null,
+      "dev_auc": 0.9486134459448227,
+      "spearman_vs_ours": 0.9677328610705146
+    },
+    {
+      "name": "LightGBM 4 leaves digits, no pairs",
+      "key": "47ec80c2946cc751",
+      "published_oof_auc": null,
+      "dev_auc": 0.9485229518045762,
+      "spearman_vs_ours": 0.967241878744285
+    },
+    {
+      "name": "XGBoost depth 2 digits, no pairs",
+      "key": "581c04132b5940af",
+      "published_oof_auc": null,
+      "dev_auc": 0.9484864084770133,
+      "spearman_vs_ours": 0.9647951820238657
+    },
+    {
+      "name": "GLM on the encodings",
+      "key": "e0f351ee76b3a71e",
+      "published_oof_auc": null,
+      "dev_auc": 0.9482402897339673,
+      "spearman_vs_ours": 0.9642020529744489
+    },
+    {
+      "name": "LightGBM 4 leaves plus",
+      "key": "d5bd0671dd68108f",
+      "published_oof_auc": null,
+      "dev_auc": 0.947720235580747,
+      "spearman_vs_ours": 0.966248129418199
+    },
+    {
+      "name": "XGBoost depth 2 bag3",
+      "key": "0958aef8e20ba93c",
+      "published_oof_auc": null,
+      "dev_auc": 0.9476081786340057,
+      "spearman_vs_ours": 0.9705305766187357
+    },
+    {
+      "name": "LightGBM 4 leaves b",
+      "key": "b890168ab4ab0fdc",
+      "published_oof_auc": null,
+      "dev_auc": 0.9475026734802648,
+      "spearman_vs_ours": 0.9698577267461431
+    },
+    {
+      "name": "XGBoost depth 1 bag3",
+      "key": "ddfa69a32874765c",
+      "published_oof_auc": null,
+      "dev_auc": 0.9474486296365492,
+      "spearman_vs_ours": 0.9713272726451005
+    },
+    {
+      "name": "XGBoost depth 2 plus",
+      "key": "e13d1e5d005b82ad",
+      "published_oof_auc": null,
+      "dev_auc": 0.9474271326703884,
+      "spearman_vs_ours": 0.9675108756735729
+    },
+    {
+      "name": "LightGBM 4 leaves",
+      "key": "278d2f3f2c3631c2",
+      "published_oof_auc": null,
+      "dev_auc": 0.9473987449985932,
+      "spearman_vs_ours": 0.9681989037880433
+    },
+    {
+      "name": "XGBoost depth 2",
+      "key": "a9fffc89ca5f057f",
+      "published_oof_auc": null,
+      "dev_auc": 0.9473861799826399,
+      "spearman_vs_ours": 0.9702519946227526
+    },
+    {
+      "name": "LightGBM tuned",
+      "key": "91652b3e9b245296",
+      "published_oof_auc": null,
+      "dev_auc": 0.9473704633705219,
+      "spearman_vs_ours": 0.971706142987143
+    },
+    {
+      "name": "XGBoost tuned",
+      "key": "41998f38c106cf45",
+      "published_oof_auc": null,
+      "dev_auc": 0.9472988716211503,
+      "spearman_vs_ours": 0.9700914333740278
+    },
+    {
+      "name": "XGBoost depth 1",
+      "key": "772ddea4c3876dec",
+      "published_oof_auc": null,
+      "dev_auc": 0.947271236646153,
+      "spearman_vs_ours": 0.9703841300768397
+    },
+    {
+      "name": "RealMLP digits",
+      "key": "42eb4cf755012e69",
+      "published_oof_auc": null,
+      "dev_auc": 0.9470229515813212,
+      "spearman_vs_ours": 0.9456007057644292
+    },
+    {
+      "name": "XGBoost depth 2 raw",
+      "key": "30a64e99a4f93aee",
+      "published_oof_auc": null,
+      "dev_auc": 0.946754051305834,
+      "spearman_vs_ours": 0.9711515745804796
+    },
+    {
+      "name": "LightGBM 4 leaves raw",
+      "key": "750a3a13593f5e05",
+      "published_oof_auc": null,
+      "dev_auc": 0.9466976732377695,
+      "spearman_vs_ours": 0.9682680501911777
+    },
+    {
+      "name": "CatBoost tuned",
+      "key": "5c81dd1f0c458e52",
+      "published_oof_auc": null,
+      "dev_auc": 0.9466188512874721,
+      "spearman_vs_ours": 0.9696610820595349
+    },
+    {
+      "name": "CatBoost depth 3",
+      "key": "5160560b658e88f4",
+      "published_oof_auc": null,
+      "dev_auc": 0.9463994081733181,
+      "spearman_vs_ours": 0.9670677713416911
+    },
+    {
+      "name": "XGBoost",
+      "key": "74dcf78882edd49f",
+      "published_oof_auc": null,
+      "dev_auc": 0.9463563285902965,
+      "spearman_vs_ours": 0.960655784624851
+    },
+    {
+      "name": "XGBoost deep",
+      "key": "983fbb55a2b59a74",
+      "published_oof_auc": null,
+      "dev_auc": 0.9463423495609163,
+      "spearman_vs_ours": 0.9670177688701028
+    },
+    {
+      "name": "CatBoost",
+      "key": "9b95a64105ce0e91",
+      "published_oof_auc": null,
+      "dev_auc": 0.9463024690606721,
+      "spearman_vs_ours": 0.9681707626239409
+    },
+    {
+      "name": "TabM",
+      "key": "15d0d127372ea048",
+      "published_oof_auc": null,
+      "dev_auc": 0.946113234618229,
+      "spearman_vs_ours": 0.9592989812946952
+    },
+    {
+      "name": "LightGBM +features",
+      "key": "10bad431843b4481",
+      "published_oof_auc": null,
+      "dev_auc": 0.9460060300458379,
+      "spearman_vs_ours": 0.9592334279923184
+    },
+    {
+      "name": "RealMLP",
+      "key": "888d3d64c3854ba8",
+      "published_oof_auc": null,
+      "dev_auc": 0.9456972959798418,
+      "spearman_vs_ours": 0.9485870816356641
+    },
+    {
+      "name": "LightGBM raw",
+      "key": "5546bd639f98c251",
+      "published_oof_auc": null,
+      "dev_auc": 0.9455384450064572,
+      "spearman_vs_ours": 0.9662538917244813
+    },
+    {
+      "name": "Spline GLM",
+      "key": "spline_glm_88df84742d",
+      "published_oof_auc": null,
+      "dev_auc": 0.9449810485075791,
+      "spearman_vs_ours": 0.9660857064047119
+    },
+    {
+      "name": "LightGBM from original",
+      "key": "e0749b53ac73f63d",
+      "published_oof_auc": null,
+      "dev_auc": 0.9436728517622183,
+      "spearman_vs_ours": 0.9427475888974851
+    },
+    {
+      "name": "kNN rate",
+      "key": "989e37e5bd1f1063",
+      "published_oof_auc": null,
+      "dev_auc": 0.8977082081346122,
+      "spearman_vs_ours": 0.5991278124842115
+    }
+  ],
+  "rows": 299984,
+  "file": "submissions/public_oof_blend.csv",
+  "created_at": "2026-11-22T05:08:19.100130+00:00",
+  "uploaded": true,
+  "kaggle_submission": {
+    "competition": "playground-series-s6e11",
+    "reference": 58703492,
+    "file": "submissions/public_oof_blend.csv",
+    "description": "dev rank blend: ours 0.1 plus two CC0 public LightGBM OOFs",
+    "submitted_at": "2026-11-22T05:08:37.740000",
+    "status": "COMPLETE",
+    "public_score": 0.95146,
+    "private_score": null,
+    "became_team_best": true,
+    "previous_team_best_public_score": 0.95132,
+    "public_leaderboard_rank": 874,
+    "public_leaderboard_teams": 2634,
+    "team_name": "Atlantic7931",
+    "daily_submissions_remaining_after_submit": 7,
+    "leaderboard_checked_at": "2026-11-22T05:10:00"
+  }
+}

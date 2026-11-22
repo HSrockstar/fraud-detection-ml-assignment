@@ -1,0 +1,89 @@
+{
+  "previous_weights": {
+    "ours_7_3": 0.1,
+    "LightGBM 4 leaves boosted from the joint GLM, full refit": 0.4,
+    "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds": 0.5
+  },
+  "previous_dev_auc": 0.9500308117905348,
+  "previous_public_score": 0.95146,
+  "groups": [
+    {
+      "members": [
+        "ours_7_3",
+        "LightGBM 4 leaves boosted from the joint GLM, full refit",
+        "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds"
+      ],
+      "weights": [
+        0.15,
+        0.45,
+        0.4
+      ],
+      "dev_auc": 0.9500337888806816,
+      "step": 0.05,
+      "spearman_vs_submitted": 0.9999528952778642
+    },
+    {
+      "members": [
+        "ours_7_3",
+        "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds",
+        "XGBoost depth 2, Part 3 recipe, 5 encoder seeds, full refit"
+      ],
+      "weights": [
+        0.15,
+        0.65,
+        0.2
+      ],
+      "dev_auc": 0.9498299453615326,
+      "step": 0.05,
+      "spearman_vs_submitted": 0.9987783131390475
+    },
+    {
+      "members": [
+        "ours_7_3",
+        "LightGBM 4 leaves boosted from the joint GLM, full refit",
+        "XGBoost depth 2, Part 3 recipe, 5 encoder seeds, full refit"
+      ],
+      "weights": [
+        0.15,
+        0.45,
+        0.4
+      ],
+      "dev_auc": 0.950011379666589,
+      "step": 0.05,
+      "spearman_vs_submitted": 0.9992930501723174
+    },
+    {
+      "members": [
+        "ours_7_3",
+        "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds",
+        "LightGBM 4 leaves boosted from the joint GLM, full refit",
+        "XGBoost depth 2, Part 3 recipe, 5 encoder seeds, full refit"
+      ],
+      "weights": [
+        0.1,
+        0.4,
+        0.4,
+        0.1
+      ],
+      "dev_auc": 0.9500332350644207,
+      "step": 0.1,
+      "spearman_vs_submitted": 0.9999649722381911
+    }
+  ],
+  "chosen_members": [
+    "ours_7_3",
+    "LightGBM 4 leaves boosted from the joint GLM, full refit",
+    "LightGBM 3 leaves, Part 5 recipe, 5 encoder seeds"
+  ],
+  "chosen_weights": [
+    0.15,
+    0.45,
+    0.4
+  ],
+  "chosen_dev_auc": 0.9500337888806816,
+  "chosen_spearman_vs_submitted": 0.9999528952778642,
+  "file": "submissions/public_oof_blend_retune.csv",
+  "created_at": "2026-11-22T05:15:55.239114+00:00",
+  "uploaded": false,
+  "decision": "最优比例 0.15/0.45/0.40 与已提交文件的测试集 Spearman 为 0.99995，开发集只高 0.000003。没有上传。"
+}
