@@ -44,7 +44,7 @@ VALUE_KEY_COLUMNS = (
     "amount_usd", "account_balance_usd", "distance_from_home_km",
     "hours_since_last_txn", "velocity_score", "merchant_risk_score",
 )
-VALUE_KEY_MODES = ("exact", "parts", "digits", "interactions", "interactions_ext", "score_integers", "score_pair")
+VALUE_KEY_MODES = ("exact", "parts", "digits", "tails", "interactions", "interactions_ext", "score_integers", "score_pair")
 SCORE_INTEGER_COLUMNS = ("merchant_risk_score", "velocity_score")
 
 
@@ -71,6 +71,18 @@ def _part_tokens(series: pd.Series) -> tuple[pd.Series, pd.Series]:
     integer = np.char.mod("%.0f", np.trunc(finite))
     fraction = np.char.mod("%.4f", np.round(finite - np.trunc(finite), 4))
     return _string_tokens(series.index, values, integer), _string_tokens(series.index, values, fraction)
+
+
+def _tail_tokens(series: pd.Series) -> tuple[pd.Series, pd.Series]:
+    values = _numeric_values(series)
+    finite = np.nan_to_num(values)
+    fraction = np.abs(finite - np.trunc(finite))
+    tail = np.clip(np.rint(fraction * 100), 0, 99)
+    tens = np.floor(np.trunc(finite) / 10.0)
+    return (
+        _string_tokens(series.index, values, np.char.mod("%.0f", tail)),
+        _string_tokens(series.index, values, np.char.mod("%.0f", tens)),
+    )
 
 
 def _digit_tokens(series: pd.Series, digits: int) -> pd.Series:
@@ -110,7 +122,7 @@ def value_keys(frame: pd.DataFrame, mode: str) -> pd.DataFrame:
         raise ValueError(f"未知取值编码: {mode}")
     result = frame.copy()
     needed = []
-    if {"exact", "parts", "digits"} & set(selected):
+    if {"exact", "parts", "digits", "tails"} & set(selected):
         needed.extend(VALUE_KEY_COLUMNS)
     if {"score_integers", "score_pair"} & set(selected):
         needed.extend(SCORE_INTEGER_COLUMNS)
@@ -127,6 +139,10 @@ def value_keys(frame: pd.DataFrame, mode: str) -> pd.DataFrame:
         if "digits" in selected:
             for digits in (1, 2, 3):
                 result[f"{KEY_PREFIX}digit{digits}_{column}"] = _digit_tokens(result[column], digits)
+        if "tails" in selected:
+            tail, tens = _tail_tokens(result[column])
+            result[f"{KEY_PREFIX}tail2_{column}"] = tail
+            result[f"{KEY_PREFIX}tens_{column}"] = tens
     if {"score_integers", "score_pair"} & set(selected):
         for column in SCORE_INTEGER_COLUMNS:
             integer, _fraction = _part_tokens(result[column])
@@ -160,7 +176,23 @@ def value_keys(frame: pd.DataFrame, mode: str) -> pd.DataFrame:
     return result
 
 
-def preprocessor(frame: pd.DataFrame, scale: bool = False, target_encode: bool = False, seed: int = 42, target_smooth: float = 20.0) -> ColumnTransformer:
+def _smooth_values(target_smooth) -> list[float]:
+    if isinstance(target_smooth, (int, float)):
+        return [float(target_smooth)]
+    values = [float(value) for value in target_smooth]
+    if not values or len(values) != len(set(values)):
+        raise ValueError("目标编码平滑强度为空或重复")
+    return values
+
+
+def _smooth_name(value: float, single: bool) -> str:
+    if single:
+        return "target"
+    label = str(int(value)) if float(value).is_integer() else str(value).replace(".", "p")
+    return f"target_{label}"
+
+
+def preprocessor(frame: pd.DataFrame, scale: bool = False, target_encode: bool = False, seed: int = 42, target_smooth: float | list[float] = 20.0) -> ColumnTransformer:
     keys = [column for column in frame.columns if str(column).startswith(KEY_PREFIX)]
     categorical = [column for column in frame.select_dtypes(include=["object", "string", "category"]).columns if column not in keys]
     numeric = [column for column in frame.columns if column not in categorical and column not in keys]
@@ -176,10 +208,17 @@ def preprocessor(frame: pd.DataFrame, scale: bool = False, target_encode: bool =
             ("encode", OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.float32)),
         ]), categorical))
     encoded_columns = ([column for column in frame.columns if column not in keys] if target_encode else []) + keys
+    smooths = _smooth_values(target_smooth)
     if encoded_columns:
         # fit_transform(X, y) 使用内部交叉拟合；外层验证只调用 transform。
         # vk_ 键只走目标编码，避免把金额精确值展开成高维独热。
-        transforms.append(("target", TargetEncoder(target_type="binary", smooth=target_smooth, cv=5, shuffle=True, random_state=seed), encoded_columns))
+        # 多个平滑强度各出一列，树可以同时使用收缩强弱不同的欺诈率。
+        for smooth in smooths:
+            transforms.append((
+                _smooth_name(smooth, len(smooths) == 1),
+                TargetEncoder(target_type="binary", smooth=smooth, cv=5, shuffle=True, random_state=seed),
+                encoded_columns,
+            ))
     return ColumnTransformer(transforms, sparse_threshold=0, verbose_feature_names_out=bool(encoded_columns))
 
 

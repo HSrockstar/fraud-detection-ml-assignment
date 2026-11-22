@@ -1,0 +1,146 @@
+{
+  "reference": "xgb_r2_parts_smooth80",
+  "reference_oof_auc": 0.9473121275721721,
+  "kept_fixed": "整数档、小数档、目标编码平滑 80，以及深度 3 模型的学习率、采样和正则。只改深度或叶数。",
+  "protocol": "开发集三折。早停只用外层训练折内部 10%。独立测试集不参与。",
+  "rows": [
+    {
+      "name": "xgb_r3_depth1_parts_s80",
+      "oof_auc": 0.9481326168989056,
+      "oof_ap": 0.5173331560173028,
+      "fold_auc": [
+        0.948460453401629,
+        0.9488616482722437,
+        0.9471317226292695
+      ],
+      "iterations": [
+        1090,
+        1680,
+        1258
+      ],
+      "seconds": 84.06994610000402,
+      "delta_vs_depth3": 0.0008204893267335089,
+      "tree": {
+        "grow_policy": "depthwise",
+        "max_leaves": 0,
+        "max_depth": 1,
+        "device": "cpu"
+      }
+    },
+    {
+      "name": "xgb_r3_depth2_parts_s80",
+      "oof_auc": 0.9478667711099459,
+      "oof_ap": 0.5149977754649409,
+      "fold_auc": [
+        0.9482781555005693,
+        0.9486370756328351,
+        0.9468523160621372
+      ],
+      "iterations": [
+        433,
+        800,
+        479
+      ],
+      "seconds": 73.22761500000342,
+      "delta_vs_depth3": 0.0005546435377737913,
+      "tree": {
+        "grow_policy": "depthwise",
+        "max_leaves": 0,
+        "max_depth": 2,
+        "device": "cpu"
+      }
+    },
+    {
+      "name": "xgb_r3_leaves2_parts_s80",
+      "oof_auc": 0.9481326168989056,
+      "oof_ap": 0.5173331560173028,
+      "fold_auc": [
+        0.948460453401629,
+        0.9488616482722437,
+        0.9471317226292695
+      ],
+      "iterations": [
+        1090,
+        1680,
+        1258
+      ],
+      "seconds": 83.64134049999848,
+      "delta_vs_depth3": 0.0008204893267335089,
+      "tree": {
+        "grow_policy": "lossguide",
+        "max_leaves": 2,
+        "max_depth": 0,
+        "device": "cpu"
+      }
+    },
+    {
+      "name": "xgb_r3_leaves3_parts_s80",
+      "oof_auc": 0.9481460231756457,
+      "oof_ap": 0.516641276799163,
+      "fold_auc": [
+        0.9485039753190481,
+        0.9489719445241536,
+        0.9470239119956327
+      ],
+      "iterations": [
+        614,
+        890,
+        662
+      ],
+      "seconds": 82.10652720000508,
+      "delta_vs_depth3": 0.0008338956034735778,
+      "tree": {
+        "grow_policy": "lossguide",
+        "max_leaves": 3,
+        "max_depth": 0,
+        "device": "cpu"
+      }
+    },
+    {
+      "name": "xgb_r3_leaves4_parts_s80",
+      "oof_auc": 0.9476962350310303,
+      "oof_ap": 0.5108534799111819,
+      "fold_auc": [
+        0.9479919414507616,
+        0.9484045907915188,
+        0.9467887982022191
+      ],
+      "iterations": [
+        470,
+        866,
+        593
+      ],
+      "seconds": 66.18536609999865,
+      "delta_vs_depth3": 0.0003841074588581961,
+      "tree": {
+        "grow_policy": "lossguide",
+        "max_leaves": 4,
+        "max_depth": 0,
+        "device": "cpu"
+      }
+    }
+  ],
+  "best": {
+    "name": "xgb_r3_leaves3_parts_s80",
+    "oof_auc": 0.9481460231756457,
+    "oof_ap": 0.516641276799163,
+    "fold_auc": [
+      0.9485039753190481,
+      0.9489719445241536,
+      0.9470239119956327
+    ],
+    "iterations": [
+      614,
+      890,
+      662
+    ],
+    "seconds": 82.10652720000508,
+    "delta_vs_depth3": 0.0008338956034735778,
+    "tree": {
+      "grow_policy": "lossguide",
+      "max_leaves": 3,
+      "max_depth": 0,
+      "device": "cpu"
+    }
+  }
+}

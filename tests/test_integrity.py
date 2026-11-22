@@ -8,6 +8,7 @@ from sklearn.metrics import f1_score
 from fraud import common
 from fraud.evaluation import f1_threshold, metrics
 from fraud.features import cat_frame, engineer, preprocessor, value_keys
+from fraud.models import _glm_margin, _train_glm, fit_model
 
 
 def test_preprocessing_learns_only_training_data():
@@ -105,6 +106,46 @@ def test_score_pair_uses_integer_bins_not_exact_values():
     assert encoded.loc[0, "vk_integer_merchant_risk_score"] == "77"
     assert encoded.loc[0, "vk_merchant_velocity_integer"] == "77|53"
     assert "vk_integer_amount_usd" not in encoded.columns
+
+
+def test_tail_keys_keep_two_decimals_and_tens_groups():
+    frame = _value_frame([1234.56, 61.16])
+    encoded = value_keys(frame, "tails")
+    assert encoded.loc[0, "vk_tail2_amount_usd"] == "56"
+    assert encoded.loc[0, "vk_tens_amount_usd"] == "123"
+    assert encoded.loc[1, "vk_tail2_amount_usd"] == "16"
+    assert encoded.loc[1, "vk_tens_amount_usd"] == "6"
+    assert "vk_integer_amount_usd" not in encoded.columns
+
+
+def test_multiple_target_smooth_values_are_separate_columns():
+    frame = pd.DataFrame({"amount": np.arange(40), "category": ["A", "B"] * 20})
+    y = np.tile([0, 1], 20)
+    prep = preprocessor(frame, target_encode=True, seed=0, target_smooth=[5, 80])
+    encoded = prep.fit_transform(frame, y)
+    names = prep.get_feature_names_out().tolist()
+    assert encoded.shape[1] == len(names)
+    assert "target_5__amount" in names and "target_80__amount" in names
+    assert "target_5__category" in names and "target_80__category" in names
+    assert not np.allclose(encoded[:, names.index("target_5__category")], encoded[:, names.index("target_80__category")])
+
+
+def test_glm_margin_uses_training_rows_only():
+    encoded = np.column_stack([np.arange(40), np.zeros(40)])
+    y = np.array([0, 1] * 20)
+    glm, scaler = _train_glm(encoded[:30], y[:30], 1.0)
+    train_margin = _glm_margin(glm, scaler, encoded[:30])
+    unseen_margin = _glm_margin(glm, scaler, encoded[30:])
+    assert train_margin.shape == (30,)
+    assert np.isfinite(train_margin).all() and np.isfinite(unseen_margin).all()
+    assert train_margin[y[:30] == 1].mean() > train_margin[y[:30] == 0].mean()
+
+
+def test_glm_boost_rejects_non_xgboost():
+    frame = pd.DataFrame({"amount": [1.0, 2.0, 3.0, 4.0], "category": ["A", "B", "A", "B"]})
+    y = np.array([0, 1, 0, 1])
+    with pytest.raises(ValueError, match="XGBoost"):
+        fit_model("tree", {"glm_boost": True}, frame, y, seed=0)
 
 
 def test_unknown_value_encoding_is_rejected():

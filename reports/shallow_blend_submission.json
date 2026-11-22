@@ -1,0 +1,45 @@
+{
+  "leaves": "xgb_r3_leaves3_parts_s80",
+  "depth1": "xgb_r3_depth1_parts_s80",
+  "leaves_weight": 0.5,
+  "depth1_weight": 0.5,
+  "leaves_fixed_iterations": 662,
+  "depth1_fixed_iterations": 1258,
+  "leaves_fold_iterations": [
+    614,
+    890,
+    662
+  ],
+  "depth1_fold_iterations": [
+    1090,
+    1680,
+    1258
+  ],
+  "oof_auc": 0.9483087565923245,
+  "selection": "开发集折外预测上，3 叶与深度 1 按 0.05 步长搜索，0.5/0.5 最高。加入 CatBoost 的增益低于 0.00005，未纳入。独立测试集不参与。",
+  "rows": 299984,
+  "probability_min": 7.336914791267191e-07,
+  "probability_max": 0.9995207786560059,
+  "file": "submissions/xgb_leaves3_depth1_50_50.csv",
+  "trained_on": "all_official_labeled_data",
+  "holdout_used_for_selection": false,
+  "uploaded": true,
+  "created_at": "2026-11-21T15:15:20.513481+00:00",
+  "kaggle_submission": {
+    "competition": "playground-series-s6e11",
+    "reference": 58675118,
+    "file": "submissions/xgb_leaves3_depth1_50_50.csv",
+    "description": "xgb 3-leaf 0.5 and depth-1 0.5 parts smooth 80",
+    "submitted_at": "2026-11-21T15:15:40.170000",
+    "status": "COMPLETE",
+    "public_score": 0.95041,
+    "private_score": null,
+    "became_team_best": false,
+    "team_best_public_score": 0.95132,
+    "team_best_file": "submissions/xgb_cat_parts_70_30.csv",
+    "public_leaderboard_rank": 904,
+    "public_leaderboard_teams": 2571,
+    "team_name": "Atlantic7931",
+    "leaderboard_checked_at": "2026-11-21T15:16:30"
+  }
+}

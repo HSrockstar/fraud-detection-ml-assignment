@@ -6,6 +6,7 @@ __pycache__/
 .env
 kaggle.json
 data/raw/
+data/original/
 data/processed/
 artifacts/
 submissions/*.csv

@@ -1,0 +1,394 @@
+{
+  "created_at": "2026-11-21T14:23:21.521092+00:00",
+  "scope": "开发集折外预测。不训练，不读取独立测试集，不生成提交。",
+  "blend": {
+    "xgb": "xgb_r2_parts_smooth80",
+    "cat": "cat_r2_parts",
+    "xgb_weight": 0.7,
+    "cat_weight": 0.3
+  },
+  "flags": [
+    "cvv_retry",
+    "no_auth",
+    "new_merchant",
+    "ip_mismatch",
+    "billing_mismatch",
+    "foreign",
+    "vpn",
+    "ai_flag",
+    "gift_crypto_game",
+    "risk_ge_60",
+    "velocity_ge_40",
+    "txn_ge_6"
+  ],
+  "zones": {
+    "all": {
+      "rows": 559968,
+      "frauds": 9351,
+      "fraud_rate": 0.01669916852391565,
+      "auc": 0.9478163587782216,
+      "fraud_score": {
+        "p10": 0.011323198268290743,
+        "p50": 0.20528778512337287,
+        "p90": 0.8946328298794288,
+        "p99": 0.9909099253535447
+      },
+      "normal_score": {
+        "p10": 0.00020537737992951653,
+        "p50": 0.0017969776186793612,
+        "p90": 0.020312732794972317,
+        "p99": 0.1808383294475901
+      }
+    },
+    "loud": {
+      "rows": 241346,
+      "frauds": 8811,
+      "fraud_rate": 0.03650775235553935,
+      "auc": 0.9236134052766465,
+      "fraud_score": {
+        "p10": 0.018632715829610985,
+        "p50": 0.23652459011433238,
+        "p90": 0.901579714381985,
+        "p99": 0.9911922981429062
+      },
+      "normal_score": {
+        "p10": 0.0007417838351514394,
+        "p50": 0.006103604144317657,
+        "p90": 0.051153568925828855,
+        "p99": 0.31852145245418134
+      }
+    },
+    "quiet": {
+      "rows": 318622,
+      "frauds": 540,
+      "fraud_rate": 0.0016947982248557852,
+      "auc": 0.8445028326029138,
+      "fraud_score": {
+        "p10": 0.0012738889712566525,
+        "p50": 0.004898135261770355,
+        "p90": 0.017172755555532056,
+        "p99": 0.04786397585079148
+      },
+      "normal_score": {
+        "p10": 0.00013270511536928918,
+        "p50": 0.0008905565537639542,
+        "p90": 0.004554688778055758,
+        "p99": 0.01435729473682453
+      }
+    }
+  },
+  "pair_decomposition": {
+    "total_pairs": 5148819567,
+    "reconstructed_auc": 0.9478163587782217,
+    "pieces": [
+      {
+        "pair": "loud_fraud_vs_quiet_normal",
+        "positive": 8811,
+        "negative": 318082,
+        "pair_share": 0.544322920143222,
+        "win_rate": 0.9940596338362189,
+        "auc_contribution": 0.5410894426862327
+      },
+      {
+        "pair": "loud_fraud_vs_loud_normal",
+        "positive": 8811,
+        "negative": 232535,
+        "pair_share": 0.39792924540057006,
+        "win_rate": 0.9236134052766465,
+        "auc_contribution": 0.36753278540358686
+      },
+      {
+        "pair": "quiet_fraud_vs_quiet_normal",
+        "positive": 540,
+        "negative": 318082,
+        "pair_share": 0.033359933818787865,
+        "win_rate": 0.8445028326029137,
+        "auc_contribution": 0.02817255860541209
+      },
+      {
+        "pair": "quiet_fraud_vs_loud_normal",
+        "positive": 540,
+        "negative": 232535,
+        "pair_share": 0.024387900637420027,
+        "win_rate": 0.45192787386048616,
+        "auc_contribution": 0.011021572082990028
+      }
+    ]
+  },
+  "within_exact_pattern": {
+    "patterns_with_both_classes": 443,
+    "pair_weight": 234156718,
+    "weighted_auc": 0.8435225249441702
+  },
+  "flag_pattern_auc": 0.8680675952690653,
+  "loud_flag_pattern_auc": 0.8239331643710783,
+  "overall_gap_over_flags": 0.07974876350915627,
+  "loud_gap_over_flags": 0.09968024090556815,
+  "groups": {
+    "low_loud_fraud": {
+      "rows": 1763,
+      "score": {
+        "p10": 0.004983229011430338,
+        "p50": 0.018632715829610985,
+        "p90": 0.037664558709558836,
+        "p99": 0.042472219678628124
+      },
+      "flag_count_median": 1.0,
+      "merchant_risk_score_median": 39.6,
+      "velocity_score_median": 22.8,
+      "customer_age_median": 55.0,
+      "amount_usd_median": 28.14,
+      "flag_share": {
+        "cvv_retry": 0.20760068065796938,
+        "no_auth": 0.2319909245604084,
+        "new_merchant": 0.3284174702212138,
+        "ip_mismatch": 0.0368689733408962,
+        "billing_mismatch": 0.03743618831537152,
+        "foreign": 0.04537719795802609,
+        "vpn": 0.08111174134997164,
+        "ai_flag": 0.006239364719228588,
+        "gift_crypto_game": 0.1276233692569484,
+        "risk_ge_60": 0.06920022688598979,
+        "velocity_ge_40": 0.08451503119682359,
+        "txn_ge_6": 0.11457742484401588
+      },
+      "score_max": 0.043228808417182296
+    },
+    "high_loud_fraud": {
+      "rows": 1763,
+      "score": {
+        "p10": 0.7800059516599548,
+        "p50": 0.901579714381985,
+        "p90": 0.9843181198327513,
+        "p99": 0.9971417015344096
+      },
+      "flag_count_median": 4.0,
+      "merchant_risk_score_median": 49.8,
+      "velocity_score_median": 31.2,
+      "customer_age_median": 65.0,
+      "amount_usd_median": 34.15,
+      "flag_share": {
+        "cvv_retry": 0.8315371525808282,
+        "no_auth": 0.577424844015882,
+        "new_merchant": 0.5887691435053886,
+        "ip_mismatch": 0.37152580828133863,
+        "billing_mismatch": 0.19852524106636416,
+        "foreign": 0.3017583664208735,
+        "vpn": 0.22688598979013047,
+        "ai_flag": 0.07317073170731707,
+        "gift_crypto_game": 0.288712422007941,
+        "risk_ge_60": 0.29381735677821896,
+        "velocity_ge_40": 0.1973908111174135,
+        "txn_ge_6": 0.14804310833806011
+      },
+      "score_min": 0.7416654380126371
+    },
+    "top_loud_normal": {
+      "rows": 2326,
+      "score": {
+        "p10": 0.338295744823605,
+        "p50": 0.45078285677606633,
+        "p90": 0.7287108851224837,
+        "p99": 0.9165509959010198
+      },
+      "flag_count_median": 3.0,
+      "merchant_risk_score_median": 48.1,
+      "velocity_score_median": 28.9,
+      "customer_age_median": 63.0,
+      "amount_usd_median": 32.585,
+      "flag_share": {
+        "cvv_retry": 0.6418744625967326,
+        "no_auth": 0.43637145313843506,
+        "new_merchant": 0.5163370593293207,
+        "ip_mismatch": 0.17368873602751506,
+        "billing_mismatch": 0.1173688736027515,
+        "foreign": 0.14316423043852106,
+        "vpn": 0.15047291487532244,
+        "ai_flag": 0.033963886500429925,
+        "gift_crypto_game": 0.24763542562338778,
+        "risk_ge_60": 0.21410146173688735,
+        "velocity_ge_40": 0.1530524505588994,
+        "txn_ge_6": 0.14359415305245055
+      },
+      "score_min": 0.31852145245418134
+    }
+  },
+  "flag_counts": [
+    {
+      "flag_count": 0,
+      "rows": 318622,
+      "frauds": 540,
+      "fraud_rate": 0.0016947982248557852,
+      "auc": 0.8445028326029138
+    },
+    {
+      "flag_count": 1,
+      "rows": 173585,
+      "frauds": 1895,
+      "fraud_rate": 0.01091684189302071,
+      "auc": 0.8495167104115213
+    },
+    {
+      "flag_count": 2,
+      "rows": 51806,
+      "frauds": 2636,
+      "fraud_rate": 0.050882137204184844,
+      "auc": 0.864723376178092
+    },
+    {
+      "flag_count": 3,
+      "rows": 12293,
+      "frauds": 2296,
+      "fraud_rate": 0.18677296022126413,
+      "auc": 0.8665991783597797
+    },
+    {
+      "flag_count": 4,
+      "rows": 2796,
+      "frauds": 1269,
+      "fraud_rate": 0.453862660944206,
+      "auc": 0.864331706199365
+    },
+    {
+      "flag_count": 5,
+      "rows": 646,
+      "frauds": 510,
+      "fraud_rate": 0.7894736842105263,
+      "auc": 0.8792820069204154
+    },
+    {
+      "flag_count": 6,
+      "rows": 185,
+      "frauds": 171,
+      "fraud_rate": 0.9243243243243243,
+      "auc": 0.8642439431913117
+    },
+    {
+      "flag_count": 7,
+      "rows": 33,
+      "frauds": 32,
+      "fraud_rate": 0.9696969696969697,
+      "auc": 1.0
+    },
+    {
+      "flag_count": 8,
+      "rows": 2,
+      "frauds": 2,
+      "fraud_rate": 1.0,
+      "auc": null
+    }
+  ],
+  "leftover_columns": [
+    {
+      "column": "merchant_risk_score",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.7054960961976288
+    },
+    {
+      "column": "cvv_retry_count",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.6719329935546269
+    },
+    {
+      "column": "velocity_score",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.665363680453882
+    },
+    {
+      "column": "customer_age",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.6231351467887807
+    },
+    {
+      "column": "merchant_category",
+      "kind": "category_fraud_rate",
+      "loud_auc": 0.5998349918838147
+    },
+    {
+      "column": "txn_count_last_24h",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5748108869019507
+    },
+    {
+      "column": "hours_since_last_txn",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5579023253149632
+    },
+    {
+      "column": "amount_usd",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5368297949868007
+    },
+    {
+      "column": "prior_disputes",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5323655313339359
+    },
+    {
+      "column": "card_type",
+      "kind": "category_fraud_rate",
+      "loud_auc": 0.5125964813943886
+    },
+    {
+      "column": "device_type",
+      "kind": "category_fraud_rate",
+      "loud_auc": 0.5118667659889315
+    },
+    {
+      "column": "channel",
+      "kind": "category_fraud_rate",
+      "loud_auc": 0.508897014750187
+    },
+    {
+      "column": "day_of_week",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5068761291810957
+    },
+    {
+      "column": "account_balance_usd",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5054378725233155
+    },
+    {
+      "column": "card_age_months",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5026484024843821
+    },
+    {
+      "column": "distance_from_home_km",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5024989700582574
+    },
+    {
+      "column": "time_of_day_hour",
+      "kind": "numeric_direction_free",
+      "loud_auc": 0.5003728726246033
+    }
+  ],
+  "decision": {
+    "action": "停止在现有列上继续加特征或更换模型",
+    "reason": "同一组标记内部 AUC 0.8435 是当前融合已经排出的成绩，主要来自商户风险、交易速度和 CVV 次数，不是待做的新步骤。夜间、距离、余额、金额、星期、卡组织和渠道在有标记交易上接近随机。没有这些标记的欺诈，分数落在同类正常交易内部。",
+    "within_pattern_auc_is_current_model": true,
+    "quiet_fraud_inside_normal_mass": false,
+    "near_chance_columns": [
+      "hours_since_last_txn",
+      "amount_usd",
+      "prior_disputes",
+      "card_type",
+      "device_type",
+      "channel",
+      "day_of_week",
+      "account_balance_usd",
+      "card_age_months",
+      "distance_from_home_km",
+      "time_of_day_hour"
+    ],
+    "merchant_category_auc_without_gift_crypto_game": 0.5782191445310136,
+    "loud_age_fraud_rate": {
+      "youngest_age": 18,
+      "youngest_rate": 0.005263157894736842,
+      "oldest_age": 81,
+      "oldest_rate": 0.05177914110429448
+    }
+  }
+}
