@@ -26,9 +26,11 @@ def run():
             digest = hashlib.file_digest(stream, "sha256").hexdigest()
         assert digest == value["sha256"], f"原始文件发生变化: {name}"
     checks.append("三个官方数据文件 SHA256 与下载清单一致")
-    for path in (ROOT / "reports/experiments").glob("*.json"):
+    selection = json.loads((ROOT / "reports/selection.json").read_text(encoding="utf-8"))
+    for name in selection["all_experiments"]:
+        path = ROOT / "reports/experiments" / f"{name}.json"
         result = json.loads(path.read_text(encoding="utf-8"))
-        name = result["spec"]["name"]
+        assert result["spec"]["name"] == name
         oof = pd.read_parquet(ROOT / "artifacts" / name / "oof.parquet")
         assert np.array_equal(oof[ID], dev[ID]) and np.array_equal(oof.fold, folds)
         assert np.isclose(metrics(oof[TARGET], oof.probability)["roc_auc"], result["oof_default"]["roc_auc"], atol=1e-12)
@@ -38,7 +40,6 @@ def run():
         if result["spec"]["kind"] in {"xgb", "cat"}:
             assert all(f["training_device"] in ["cuda:0", "GPU"] for f in result["folds"])
         checks.append(f"{name}: OOF 覆盖、指标复算、持久化推理一致")
-    selection = json.loads((ROOT / "reports/selection.json").read_text(encoding="utf-8"))
     holdout = json.loads((ROOT / "reports/holdout_metrics.json").read_text(encoding="utf-8"))
     frame = pd.read_parquet(ROOT / "artifacts/evaluation/holdout_predictions.parquet")
     assert set(frame[ID]).isdisjoint(dev[ID])
@@ -60,5 +61,8 @@ def run():
     checks.append("299984 行提交文件列名、顺序、范围和最终模型推理一致")
     for name in ["实验报告.md", "report_content.json", "model_comparison.csv", "environment.json"]:
         assert (ROOT / "reports" / name).is_file()
+    if (ROOT / "reports/extensions/results.json").exists():
+        from .extensions import verify as verify_extensions
+        checks.append(verify_extensions(dev, folds))
     write_json(ROOT / "reports/verification.json", {"checked_at": timestamp(), "passed": True, "checks": checks})
     print("\n".join(checks), flush=True)

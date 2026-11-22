@@ -142,14 +142,22 @@ def run():
     figure("optimization", "图 6 参数搜索过程")
     para(f"最后在开发集折外预测上比较单模型与 XGBoost/CatBoost 的概率加权平均，权重步长为 0.1。只有融合 AUC 比最佳单模型至少提高 0.00005 时才增加模型组合。冻结结果为 {chosen}，OOF AUC={selection['oof_metrics']['roc_auc']:.6f}。")
     heading("6 拓展探索", 2)
-    para("本轮拓展包括超参数分析、无标签组合特征、交叉拟合目标编码、模型融合及特征重要性分析。后续可在开发集研究交互目标编码和原始数据源辅助特征，通过消融实验检查收益；新一轮选择须与本轮独立测试结果的使用历史一起记录。")
+    from .extensions_reporting import append_blocks as append_extensions, append_latest
+    append_latest(blocks)
     figure("feature_importance", "图 7 所选方案成员模型的特征重要性")
     if round2_path.exists():
         from .neural_reporting import append_blocks
         append_blocks(blocks)
+    extension_path = ROOT / "reports/extensions/results.json"
+    if extension_path.exists():
+        append_extensions(blocks, read_json("extensions/results.json"),
+                          first_section=8 if round2_path.exists() else 7,
+                          figure_number=10 if round2_path.exists() else 8)
     heading("三 实验总结")
     para(f"本项目完成了信用卡欺诈二分类的数据分析、四类模型基线、GPU 树提升训练、超参数优化、特征工程、融合选择和独立测试。首轮方案测试 ROC-AUC={final['roc_auc']:.6f}，AP={final['average_precision']:.6f}。类别严重不平衡时，应结合风险排序和少数类识别指标评价模型，避免高准确率掩盖漏检。")
-    para("完成独立测试后，按开发集交叉验证得到的训练轮数，在全部官方有标签数据上重训所选方案，并生成与官方样例列名及 id 顺序一致的提交文件。当前材料记录本地实验结果；Kaggle 上传与线上评分状态单独保存，不能以本地 AUC 代替线上成绩。")
+    para("比赛提交模型使用全部官方有标签数据重训。上述独立测试 AUC、开发集 OOF AUC 和比赛公开榜 AUC 对应各自的评估样本。")
+    if extension_path.exists():
+        para("手写逻辑回归复现了库版本的分类性能。样本量曲线与输入扰动对照补充了干净验证集上的模型比较，并量化了测试条件变化对少数类识别的影响。")
     if round2_path.exists():
         para(f"加入三种神经网络后，第二轮开发集 OOF AUC 为 {round2['oof_metrics']['roc_auc']:.6f}，相对首轮融合变化 {round2['auc_improvement']:+.6f}。各网络及融合的预测、训练耗时与持久化模型均保留，可据此继续比较精度和计算成本。")
     heading("参考资料")

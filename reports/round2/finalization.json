@@ -31,6 +31,23 @@
   },
   "submission": "submissions/round2_best.csv",
   "rows": 299984,
-  "kaggle_status": "仅生成文件，未上传 Kaggle。",
-  "evaluation_scope": "开发集选型分数，存在选择偏差；本轮未使用旧独立测试集重复选参或声称新的独立测试成绩。"
+  "kaggle_status": "已上传并完成评分：最新提交公开分数 0.94912",
+  "evaluation_scope": "开发集选型分数，存在选择偏差；本轮未使用旧独立测试集重复选参或声称新的独立测试成绩。",
+  "kaggle_submission": {
+    "competition": "playground-series-s6e11",
+    "reference": 58663057,
+    "file": "submissions/round2_best.csv",
+    "description": "round2_best latest neural ensemble",
+    "submitted_at": "2026-11-21T10:53:31.787000",
+    "status": "COMPLETE",
+    "public_score": 0.94912,
+    "private_score": null,
+    "previous_submission_public_score": 0.94922,
+    "score_delta_vs_previous": -0.0001,
+    "team_best_public_score": 0.94922,
+    "team_rank_by_best_public_score": 1267,
+    "public_leaderboard_teams": 2550,
+    "leaderboard_checked_at": "2026-11-21T10:54:08",
+    "leaderboard_note": "榜单名次按队伍当前最佳分数 0.94922 计算，不是本次提交的 0.94912。"
+  }
 }

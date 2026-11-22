@@ -16,12 +16,12 @@
     12,
     13
   ],
-  "docx_sha256": "5a22c7d6f6821c87ec011d2652494151dfc8c4e35eeb497e9bce4615b86236ac",
+  "docx_sha256": "8e22c860ea253437bd23a0103dc0701e36f214f3a69093e37a70665594740240",
   "template_sha256": "4b6dccd77acfe138ec94b89c88e0ec1730d2e65c55b5b46c5f94cc1cafac1957",
   "template_structure": {
     "original_styles_preserved": true,
     "section_geometry_preserved": true,
-    "figure_count": 9,
+    "figure_count": 10,
     "preserve_only_parts_unchanged": true
   },
   "renderer": "Microsoft Word 16.0 read-only PDF export; bundled render_docx.py rasterizer",
@@ -32,8 +32,8 @@
     "Pillow": "13.0.0"
   },
   "notes": [
-    "已逐页检查全部13页，中文、数字、表格和图表无截断或重叠",
-    "四人姓名学号齐全，分工按用户要求留白",
-    "报告与源模板均使用Word渲染对照；原件未修改"
+    "所有 13 页逐页核对。手写算法对照表完整位于第 12 页。",
+    "两项新选做、公开榜记录及鲁棒性曲线已核对。",
+    "四人姓名学号齐全，分工按用户要求留白。"
   ]
 }

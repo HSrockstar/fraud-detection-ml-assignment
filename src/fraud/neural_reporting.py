@@ -43,7 +43,6 @@ def figures():
 
 def append_blocks(blocks):
     cfg=neural_config()
-    benchmark=load("hardware_benchmark.json")
     selection=load("selection.json")
     comparison=pd.read_csv(REPORTS/"model_comparison.csv")
     results={kind:load(f"{kind}.json") for kind in cfg["models"]}
@@ -52,9 +51,7 @@ def append_blocks(blocks):
     def table(headers,rows):blocks.append({"type":"table","headers":headers,"rows":rows})
     blocks.append({"type":"heading","level":2,"text":"7 深度学习分类与第二轮融合"})
     actual_gpu=results["mlp"]["folds"][0]["training_device"]
-    para(f"第二轮依次比较小型 MLP、FT-Transformer 和 TabM。先在本机 RTX 4060 Laptop GPU 上使用完整内部训练折进行短测，记录显存峰值与每轮训练及验证耗时，再按最多 {cfg['max_epochs']} 轮估算三折内部早停、训练折重训和全量模型的时间，并预留 25% 余量。三种模型均可运行；本轮全部实验固定使用 {actual_gpu}。时间估计用于安排实验，实际耗时以完整训练日志为准。")
-    table(["网络","稳定每轮 秒","峰值分配 MiB","全流程估计 分钟"],[[LABELS[kind],f"{value.get('steady_epoch_seconds',0):.2f}",f"{value.get('peak_memory_mib',0):.0f}",f"{value.get('estimated_full_cv_and_final_minutes',0):.1f}"] for kind,value in benchmark["models"].items()])
-    para("表中显存为 PyTorch 张量分配峰值，不含驱动和桌面等系统占用。全流程估计按每次训练均达到最大轮数计算，实际训练由内部早停确定轮数。")
+    para(f"第二轮在 {actual_gpu} 上比较 MLP、FT-Transformer 和 TabM，显存峰值及每轮耗时另见硬件实测记录。")
     para("连续数值在每次实际训练数据内拟合中位数填补和正态分位数变换，布尔标记保留 0/1，字符串类别建立训练词表并为未知值预留编号。MLP 使用类别嵌入与 256、128、64 单元的全连接层。FT-Transformer 将各字段编码为 token，以 3 层、64 维、4 个注意力头学习字段交互。TabM 使用官方实现，设置 16 个共享参数成员、3 层 128 维网络和分段线性数值嵌入。")
     para(f"三种方法均采用 AdamW、二元交叉熵和 BF16 混合精度。最多训练 {cfg['max_epochs']} 轮，根据外层训练折内部 10% 样本的 AUC 早停，再以选定轮数重训完整外层训练折。外层验证样本只用于生成 OOF 预测；TabM 对成员概率取平均。完整配置、逐轮损失、早停 AUC、GPU 型号和显存峰值均保存。")
     para(f"神经网络环境为 PyTorch {env['torch']}、CUDA {env['torch_cuda']}、tabm {env['packages']['tabm']} 与 rtdl-revisiting-models {env['packages']['rtdl-revisiting-models']}。训练使用 BF16，评估与提交预测使用 FP32，以减少低精度输出造成的排序并列。")

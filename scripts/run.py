@@ -8,23 +8,23 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("stage", choices=["eda", "baseline", "optimize", "finalize", "report", "verify", "all"])
+    parser.add_argument("stage", choices=["eda", "baseline", "optimize", "finalize", "extensions", "report", "verify", "all"])
     parser.add_argument("--trials", type=int, default=None)
     args = parser.parse_args()
     from fraud import eda, experiments
-    if args.stage == "all" and (experiments.ROOT / "reports/selection.json").exists():
-        from fraud.finalize import run as finalize
-        from fraud.reporting import run as report
-        from fraud.verify import run as verify
-        finalize()
-        report()
-        verify()
-        return
-    if args.stage in {"eda", "all"}: eda.run()
-    if args.stage in {"baseline", "all"}: experiments.baseline()
-    if args.stage in {"optimize", "all"}: experiments.optimize(args.trials)
+
+    frozen = (experiments.ROOT / "reports/selection.json").exists()
+    if args.stage == "eda" or (args.stage == "all" and not frozen):
+        eda.run()
+    if args.stage == "baseline" or (args.stage == "all" and not frozen):
+        experiments.baseline()
+    if args.stage == "optimize" or (args.stage == "all" and not frozen):
+        experiments.optimize(args.trials)
     if args.stage in {"finalize", "all"}:
         from fraud.finalize import run
+        run()
+    if args.stage in {"extensions", "all"}:
+        from fraud.extensions import run
         run()
     if args.stage in {"report", "all"}:
         from fraud.reporting import run

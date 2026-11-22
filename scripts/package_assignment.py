@@ -14,6 +14,9 @@ def main():
     for name in ["reports/verification.json", "reports/document_verification.json", "reports/信用卡欺诈预测_分类实验报告.docx"]:
         if not (ROOT / name).exists():
             raise SystemExit(f"缺少交付核验文件：{name}")
+    verification = json.loads((ROOT / "reports/verification.json").read_text(encoding="utf-8"))
+    if not verification.get("passed"):
+        raise SystemExit("实验核验未通过，暂不更新作业包。")
     document_check = json.loads((ROOT / "reports/document_verification.json").read_text(encoding="utf-8"))
     document_hash = hashlib.sha256((ROOT / "reports/信用卡欺诈预测_分类实验报告.docx").read_bytes()).hexdigest()
     if (not document_check.get("passed") or document_check.get("docx_sha256") != document_hash
@@ -26,7 +29,7 @@ def main():
     files=[]
     for folder in ["src", "scripts", "configs", "tests", "docs", "reports", "prompts", "作业要求"]:
         files.extend(p for p in (ROOT / folder).rglob("*") if p.is_file() and "__pycache__" not in p.parts)
-    files.extend(ROOT / name for name in ["README.md", ".gitignore", ".gitattributes"])
+    files.extend(ROOT / name for name in ["README.md", "pytest.ini", ".gitignore", ".gitattributes"])
     files.extend(ROOT.glob("requirements*.txt"))
     if (ROOT/"reports/round2/selection.json").exists():
         record=ROOT/"reports/round2/verification.json"
@@ -45,7 +48,7 @@ def main():
             assert not any(part in {".venv","data","artifacts",".git"} for part in Path(name).parts)
             assert Path(name).name not in {"kaggle.json",".env"}
     with archive.open("rb") as stream: digest=hashlib.file_digest(stream,"sha256").hexdigest()
-    (output / "package_manifest.json").write_text(json.dumps({"file":filename,"bytes":archive.stat().st_size,"sha256":digest,"files":len(set(files)),"data_recovery":"按 README 下载原始数据，运行 scripts/run.py all 重建首轮，再按第二轮步骤训练神经网络、融合并核验。","contributions":"按用户要求留白，正式提交前需补齐。"},ensure_ascii=False,indent=2),encoding="utf-8")
+    (output / "package_manifest.json").write_text(json.dumps({"file":filename,"bytes":archive.stat().st_size,"sha256":digest,"files":len(set(files)),"data_recovery":"按 README 恢复数据，运行 scripts/run.py all 重建首轮及手写算法和鲁棒性实验，再按第二轮步骤训练并核验神经网络。","contributions":"按用户要求留白，正式提交前需补齐。"},ensure_ascii=False,indent=2),encoding="utf-8")
     print(archive)
 
 

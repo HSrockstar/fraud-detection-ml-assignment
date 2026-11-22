@@ -1,8 +1,8 @@
 {
   "file": "分类作业_胡懿晨_2452273_董熙远_2452060_张哲豪_2453780_张梓桑_2451982.zip",
-  "bytes": 2405692,
-  "sha256": "f7a2949938ab58f32c0404ba662c1887b011f7220d0d04ab1eaa1842d86cc278",
-  "files": 133,
-  "data_recovery": "按 README 下载原始数据，运行 scripts/run.py all 重建首轮，再按第二轮步骤训练神经网络、融合并核验。",
+  "bytes": 2732285,
+  "sha256": "4dc14277670ef5c67d58f4037e9af14639535ab2eb0403ce80f6acd28a7819c7",
+  "files": 182,
+  "data_recovery": "按 README 恢复数据，运行 scripts/run.py all 重建首轮及手写算法和鲁棒性实验，再按第二轮步骤训练并核验神经网络。",
   "contributions": "按用户要求留白，正式提交前需补齐。"
 }

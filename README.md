@@ -27,6 +27,7 @@ XGBoost 和 CatBoost 必须通过实际 GPU 训练自检。正式实验遇到 GP
 .\.venv\Scripts\python.exe scripts/run.py baseline
 .\.venv\Scripts\python.exe scripts/run.py optimize --trials 10
 .\.venv\Scripts\python.exe scripts/run.py finalize
+.\.venv\Scripts\python.exe scripts/run.py extensions
 .\.venv\Scripts\python.exe scripts/run.py report
 .\.venv\Scripts\python.exe scripts/run.py verify
 .\.venv\Scripts\python.exe -m pytest -q
@@ -36,10 +37,17 @@ XGBoost 和 CatBoost 必须通过实际 GPU 训练自检。正式实验遇到 GP
 - `baseline`：比较逻辑回归、决策树、GPU XGBoost、GPU CatBoost。
 - `optimize`：10 次 XGBoost 搜索，再通过三折比较调参、组合特征与内部交叉拟合目标编码效果。
 - `finalize`：先冻结 OOF 选出的模型、权重及阈值，再进行独立测试；随后用全部有标签数据重训，生成比赛 CSV。
+- `extensions`：重建手写逻辑回归与 sklearn 的对照，以及训练样本量、输入噪声、异常值三个鲁棒性实验。
 - `report`：根据实际结果生成报告正文和图表。
-- `verify`：复算指标、核对数据划分、重载模型验证推理、检查提交格式。
+- `verify`：以首轮冻结清单为范围，复算指标、核对划分、重载模型并检查提交格式。已有选做结果时，同时复算其全部场景的折外指标。
 
-`all` 可从头执行以上步骤；已有冻结方案时只继续未完成的最终处理并刷新报告与核验，保留本轮测试结果。普通基线会复用同名且配置相同的完整实验；改变配置不能覆盖已有结果。
+`all` 可从头执行以上步骤。已有冻结方案时，继续未完成的最终处理，并运行或复用选做实验后刷新报告与核验。根目录运行 pytest 默认只收集项目的 `tests/`。
+
+## 手写逻辑回归与鲁棒性
+
+`scripts/run.py extensions` 只使用固定开发集三折。手写模型用 NumPy 和带回溯线搜索的牛顿法，采用与 scikit-learn L-BFGS 相同的 L2 目标函数及训练折预处理。记录三折 AUC、AP、对数损失、拟合耗时、训练目标及折外预测差值。
+
+鲁棒性比较逻辑回归和 XGBoost，按标签分层取每折训练集的 10%、25%、50%、100%，验证样本保持相同。预测阶段噪声按训练折 IQR 缩放，异常值按训练折 Q3 加十倍 IQR 生成。两模型共享同一批扰动样本，结果及具体参数见 `reports/extensions/results.json`。用于复算的逐行预测在 `artifacts/extensions/oof.parquet`，由运行入口生成。
 
 ## 评估约定
 

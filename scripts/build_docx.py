@@ -106,7 +106,7 @@ Final QA: 重新渲染并逐页检查，比较页幅、正文与标题样式，�
         item.append(run)
         return item
 
-    def make_table(headers, rows, team=False):
+    def make_table(headers, rows, team=False, keep_together=False):
         if team:
             result = copy.deepcopy(team_prototype)
             proto_rows = result.findall("w:tr", NS)
@@ -141,7 +141,7 @@ Final QA: 重新渲染并逐页检查，比较页幅、正文与标题样式，�
             row.append(trprops)
             for j, (width,text) in enumerate(zip(widths,values)):
                 cell=el("tc");cp=el("tcPr");cp.append(el("tcW", w=width,type="dxa"));cp.append(el("vAlign",val="center"));cell.append(cp)
-                p=paragraph(text, center=(count > 3 and j > 0))
+                p=paragraph(text, center=(count > 3 and j > 0), keep=keep_together and i < len(rows))
                 pp=p.find("w:pPr",NS)
                 for tag in ["ind","spacing"]:
                     for old in pp.findall("w:"+tag,NS): pp.remove(old)
@@ -179,7 +179,8 @@ Final QA: 重新渲染并逐页检查，比较页幅、正文与标题样式，�
                 props.append(el("spacing",before=60,after=60,line=288,lineRule="auto"))
             body.append(item)
         elif kind == "table":
-            body.append(make_table(block["headers"],block["rows"],team=(len(block["headers"])==2)))
+            body.append(make_table(block["headers"], block["rows"], team=len(block["headers"]) == 2,
+                                   keep_together=block.get("keep_together", False)))
             body.append(paragraph(""))
         elif kind == "figure":
             path=ROOT / "reports" / block["path"]

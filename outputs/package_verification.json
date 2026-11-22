@@ -1,8 +1,12 @@
 {
   "passed": true,
-  "checked_files": 69,
-  "archive_bytes": 1974772,
-  "sha256": "d2ed18ed384bc7e00e4c18a14279c42437d74ca6330118a3351248d52bc84840",
+  "checked_files": 182,
+  "archive_bytes": 2732285,
+  "sha256": "4dc14277670ef5c67d58f4037e9af14639535ab2eb0403ce80f6acd28a7819c7",
   "report_snapshot_separated": true,
-  "source_ast_valid": true
+  "source_ast_valid": true,
+  "extracted_unit_tests": 39,
+  "cold_extensions_rebuilt": true,
+  "recomputed_prediction_conditions": 22,
+  "max_absolute_metric_difference": 0.0
 }
