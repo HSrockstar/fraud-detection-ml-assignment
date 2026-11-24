@@ -88,15 +88,34 @@ def append_latest(blocks):
     blend = optional("blend_submission.json")
     capacity = optional("leaf_capacity.json")
     shallow = optional("shallow_blend_submission.json")
+    glm = optional("glm_submission.json")
+    public_oof = optional("public_oof_blend.json")
+    progress = optional("competition_progress.json")
     llm = optional("llm_pilot_v1/metrics.json")
     if blend and capacity and shallow:
-        public = blend["kaggle_submission"]["public_score"]
-        shallow_public = shallow["kaggle_submission"]["public_score"]
         paragraphs = [
-            f"后续将部分连续数值拆为整数档和小数档，XGBoost 使用交叉拟合目标编码，CatBoost 使用原生类别处理。按 7∶3 融合的开发集 OOF AUC 为 {blend['oof_auc']:.6f}，提交记录中的公开榜 AUC 为 {public:.5f}。",
-            f"固定学习率、正则化和编码后，三叶 XGBoost 的 OOF AUC 为 {capacity['best']['oof_auc']:.6f}，相对深度为 3 的参照提升 {capacity['best']['delta_vs_depth3']:.6f}。极浅树融合进一步得到 OOF AUC {shallow['oof_auc']:.6f}，该次公开榜 AUC 为 {shallow_public:.5f}。开发集选型与比赛评估的排序出现差异，公开榜得分仍以整数档和小数档的两模型融合为本项目已记录最高值。",
+            "数值档位实验保留原始数值，并将部分连续列拆为整数档和小数档，分别提取取值层面的风险信息。XGBoost 使用交叉拟合目标编码，CatBoost 将档位作为类别输入。两模型按 7∶3 融合，在相同开发集三折上比较。",
+            f"固定编码、学习率和正则化后，三叶 XGBoost 的 OOF AUC 为 {capacity['best']['oof_auc']:.6f}，比深度 3 的参照提高 {capacity['best']['delta_vs_depth3']:.6f}。GLM 起点实验则把逻辑回归的 logit 作为提升模型的初始得分。两项对照分别检验树容量和可加风险基准的作用。" if glm else f"固定编码、学习率和正则化后，三叶 XGBoost 的 OOF AUC 为 {capacity['best']['oof_auc']:.6f}。",
         ]
         blocks.extend({"type": "paragraph", "text": text} for text in paragraphs)
+        rows = [["整数与小数档 7∶3", f"{blend['oof_auc']:.6f}", f"{blend['kaggle_submission']['public_score']:.5f}"],
+                ["极浅树融合", f"{shallow['oof_auc']:.6f}", f"{shallow['kaggle_submission']['public_score']:.5f}"]]
+        if glm:
+            rows.append(["GLM 起点 XGBoost", f"{glm['oof_auc']:.6f}", f"{glm['kaggle_submission']['public_score']:.5f}"])
+        if public_oof:
+            rows.append(["自训与公开 OOF 融合", f"{public_oof['selected_dev_auc']:.6f}", f"{public_oof['kaggle_submission']['public_score']:.5f}"])
+        if progress:
+            rows.extend([["自训加性样条网络", "另设五折，未归档分数", f"{progress['self_trained_additive']['public_score']:.5f}"],
+                         ["公开预测 45∶45∶10", "—", f"{progress['latest_public_blend']['public_score']:.5f}"]])
+        blocks.append({"type": "table", "headers": ["方案", "开发集 OOF AUC", "实测公榜 AUC"], "rows": rows})
+        blocks.append({"type": "paragraph", "text": "前三项使用相同的本地三折划分；公榜列来自真实提交。极浅树的本地 AUC 为 0.948309，公榜为 0.95041，整数与小数档 7∶3 的公榜为 0.95132。两类评估分别反映本地选型结果和比赛测试样本上的排序表现。"})
+    if public_oof:
+        blocks.append({"type": "paragraph", "text": "公开 OOF 融合使用 Alex Chilton 以 CC0 发布的两份 LightGBM 预测[10]，与团队 7∶3 预测按 0.4、0.5、0.1 做名次加权。开发集对齐 AUC 为 0.950031，实测公榜 AUC 为 0.95146。公开模型使用各自的训练划分，该开发集分数用于融合选择。"})
+    if progress:
+        blocks.extend({"type": "paragraph", "text": text} for text in [
+            f"自训加性样条网络将数值与折内风险编码展开为分段线性基函数，并比较可加结构与八维交互结构。该轮采用种子 42 的开发集五折，与课程主实验分开记录；加性网络实测公榜 AUC 为 {progress['self_trained_additive']['public_score']:.5f}。脚本已收录，逐折预测与本地分数未随仓库归档。",
+            f"最新公开预测融合采用 Malyshev Danil V44、Areeb Ali V16 和 goodpjw2008 V40[11—13]。每份预测先按平均秩转换为百分位，再按 45%、45%、10% 相加，实测公榜 AUC 为 {progress['latest_public_blend']['public_score']:.5f}，提交编号 {progress['latest_public_blend']['reference']}。等权融合为 0.95566；45∶45∶10 与前两份原版在公榜五位小数精度上持平。该结果属于公开预测组合，分数表达相对风险排序。",
+        ])
     if llm:
         pilot_scores = llm["metrics_at_common_threshold_0_5"]
         label = f"{llm['model']}_{llm['reasoning_effort']}"

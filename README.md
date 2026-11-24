@@ -2,6 +2,20 @@
 
 本项目参加 [Kaggle Playground Series S6E11](https://www.kaggle.com/competitions/playground-series-s6e11)，同时完成机器学习课程项目 2。比赛指标为 ROC-AUC，预测目标为 `is_fraud`。训练优先使用本机 NVIDIA GPU；逻辑回归与决策树作为 CPU 对照。
 
+## 当前结果
+
+截至 2026-11-24，主要结果如下。最新公榜成绩已通过 Kaggle 只读接口核对，见 [提交与文件核验](reports/competition_progress.json)。
+
+| 方案 | 评估范围 | ROC-AUC |
+|---|---|---:|
+| 首轮目标编码 XGBoost 与 CatBoost 融合 | 冻结后的本地独立测试集 | 0.952060 |
+| 首轮树融合 90% 与 TabM 10% | 相同开发集三折 OOF | 0.946356 |
+| 整数档和小数档 XGBoost/CatBoost 7∶3 | 实测公榜 | 0.95132 |
+| 自训加性样条网络 | 实测公榜 | 0.95016 |
+| 三份公开预测 45∶45∶10 名次融合 | 实测公榜，提交 58777864 | 0.95567 |
+
+最高公榜分来自 Malyshev Danil V44、Areeb Ali V16 和 goodpjw2008 V40 的公开预测组合。输入、权重和生成方法见 [S6E11 实验说明](experiments/s6e11/README.md)，最终预测见 [public_blend_45_45_10.csv](experiments/s6e11/public_blend_45_45_10.csv)。课程主实验和后续探索采用不同划分，成绩按各自范围比较。完整结果与复现条件见 [实验进展与复现索引](docs/实验进展与复现索引.md)。
+
 ## 环境
 
 使用 Python 3.12，在项目内创建独立 `.venv`，不修改已有 conda 环境。当前机器的环境与真实 GPU 自检见 `reports/environment.json`；完整依赖版本见 `requirements-lock.txt`。
@@ -38,7 +52,7 @@ XGBoost 和 CatBoost 必须通过实际 GPU 训练自检。正式实验遇到 GP
 - `optimize`：10 次 XGBoost 搜索，再通过三折比较调参、组合特征与内部交叉拟合目标编码效果。
 - `finalize`：先冻结 OOF 选出的模型、权重及阈值，再进行独立测试；随后用全部有标签数据重训，生成比赛 CSV。
 - `extensions`：重建手写逻辑回归与 sklearn 的对照，以及训练样本量、输入噪声、异常值三个鲁棒性实验。
-- `report`：根据实际结果生成报告正文和图表。
+- `report`：根据实际结果和已归档提交记录生成 Markdown、Word 内容源和图表；Word 文件另由 `scripts/build_docx.py` 构建。
 - `verify`：以首轮冻结清单为范围，复算指标、核对划分、重载模型并检查提交格式。已有选做结果时，同时复算其全部场景的折外指标。
 
 `all` 可从头执行以上步骤。已有冻结方案时，继续未完成的最终处理，并运行或复用选做实验后刷新报告与核验。根目录运行 pytest 默认只收集项目的 `tests/`。
@@ -59,7 +73,7 @@ XGBoost 和 CatBoost 必须通过实际 GPU 训练自检。正式实验遇到 GP
 
 目标编码在每次实际训练内部使用五折交叉拟合与平滑强度 20；对训练数据调用 `fit_transform(X, y)`，对外部数据只调用 `transform(X)`。测试包含唯一值不暴露自身标签的反例检查。
 
-开发集上的排序上限记在 `reports/ranking_ceiling.md`：现有列上不再加特征或更换模型。本轮测试集已被查看，后续不得把它称为新的未见测试集，也不能通过反复查看该测试集挑选模型。新增实验应另存名称、配置和轮次，保留本轮材料。
+整数与小数档 7∶3 融合的排序诊断见 `reports/ranking_ceiling.md`，它描述该模型的误差分布，不能据此推断数据或其他模型的性能上限。后续方向见 `docs/下一轮实验候选.md`。首轮测试集已用于最终评估；后续沿用开发集选型，新增实验单独记录名称、配置和划分。
 
 ## 文件位置
 
@@ -72,6 +86,7 @@ XGBoost 和 CatBoost 必须通过实际 GPU 训练自检。正式实验遇到 GP
 | `data/raw/` | 官方原始 CSV 与下载压缩包，不加入 Git |
 | `artifacts/` | 持久化划分、模型、OOF 和最终测试预测，不加入 Git |
 | `reports/` | 实际成绩、分析图、环境与数据校验记录、实验报告 |
+| `experiments/s6e11/` | 后续自训和诊断脚本、公开预测来源及最高分 CSV |
 | `submissions/round1_best.csv` | 首轮所选方案的比赛提交文件 |
 | `submissions/round2_best.csv` | 加入三种神经网络比较后的第二轮提交文件 |
 | `作业要求/` | 教师原始要求和模板，保留原件 |
@@ -80,7 +95,7 @@ XGBoost 和 CatBoost 必须通过实际 GPU 训练自检。正式实验遇到 GP
 
 Word 报告根据 `reports/report_content.json` 和教师 DOCX 模板生成。需要重建时，在具备 `requirements-docs.txt` 中可选依赖的 Python 中运行 `scripts/build_docx.py`；本次交付使用 Codex 文档运行时构建并渲染核验。报告与代码的课程要求对应关系见 `docs/作业要求核对.md`。提交前须补齐当前按要求留白的分工栏。
 
-`scripts/package_assignment.py` 在实验和文档核验通过后创建作业 ZIP。ZIP 内的 `实验报告/` 是本轮报告与结果快照，源码重新运行时写入新的 `reports/`，因此不会把快照误认为已经完成的模型缓存。提交包不包含原始数据与模型权重；按下载步骤恢复数据，再运行 `all` 可重新训练。
+`scripts/package_assignment.py` 在实验和文档核验通过后创建作业 ZIP。ZIP 内的 `实验报告/` 保存报告与结果快照，重新运行源码时写入新的 `reports/`。包内同时保留 `experiments/s6e11/` 的脚本、说明和最终公开融合 CSV。提交包不包含原始数据与模型权重；恢复数据后运行 `all` 可重建课程主实验，后续五折实验另按其目录说明运行。
 
 生成 CSV 不会上传 Kaggle。上传会改变外部账号状态，须由用户明确指示后执行；线上分数和排名只能在真实提交后记录。
 

@@ -1,0 +1,126 @@
+{
+  "checked_at_utc": "2026-11-24T02:29:49.231306+00:00",
+  "competition": "playground-series-s6e11",
+  "evidence": "Kaggle API competition_submissions read-only lookup; no submissions created",
+  "latest_public_blend": {
+    "reference": 58777864,
+    "public_score": 0.95567,
+    "file": "experiments/s6e11/public_blend_45_45_10.csv",
+    "sha256": "bc0824032a36c61f9b8ee19d2396c6290afb58d9e0faeb6fb48870e4cbcac133",
+    "rows": 299984,
+    "score_kind": "weighted_percentile_rank",
+    "id_order_matches_official_template": true,
+    "finite_scores_in_unit_interval": true,
+    "weights": [
+      0.45,
+      0.45,
+      0.1
+    ],
+    "rank_method": "pandas rank(method=\"average\", pct=True)",
+    "weight_selection": "本仓库未归档可用于该三路权重选型的 OOF；记录实测公榜结果。"
+  },
+  "public_inputs": [
+    {
+      "author": "Malyshev Danil",
+      "title": "Fraud Signal Lab GPT-2 and GLM Fusion",
+      "version": 44,
+      "url": "https://www.kaggle.com/code/malyshevdanil/fraud-signal-lab-gpt-2-and-glm-fusion",
+      "weight": 0.45,
+      "public_score": 0.95567,
+      "verification_reference": 58777839
+    },
+    {
+      "author": "Areeb Ali",
+      "title": "Which Signals Rank Fraud",
+      "version": 16,
+      "url": "https://www.kaggle.com/code/areebbb/s6e11-which-signals-rank-fraud-lb-0-95567",
+      "weight": 0.45,
+      "public_score": 0.95567,
+      "verification_reference": 58777843
+    },
+    {
+      "author": "goodpjw2008",
+      "title": "Board Model + RealMLP",
+      "version": 40,
+      "url": "https://www.kaggle.com/code/goodpjw2008/s6e11-board-model-realmlp-lb-0-95562",
+      "weight": 0.1,
+      "public_score": 0.95562,
+      "verification_reference": 58777846
+    }
+  ],
+  "self_trained_additive": {
+    "script": "experiments/s6e11/train_context_network.py",
+    "reference": 58775843,
+    "public_score": 0.95016,
+    "split_seed": 42,
+    "development_folds": 5,
+    "oof_auc": null,
+    "artifact_status": "已收录脚本及 API 提交记录；本仓库未收录该轮 runs、逐折预测及模型权重。"
+  },
+  "api_submissions": [
+    {
+      "reference": 58777864,
+      "file": "45_45_10.csv",
+      "submitted_at_api": "2026-11-23 12:26:56.680000",
+      "status": "COMPLETE",
+      "public_score": 0.95567,
+      "description": "Percentile ranks 45/45/10: Malyshev v44, Areeb v16, goodpjw2008 v40"
+    },
+    {
+      "reference": 58777856,
+      "file": "equal.csv",
+      "submitted_at_api": "2026-11-23 12:26:49.963000",
+      "status": "COMPLETE",
+      "public_score": 0.95566,
+      "description": "Percentile ranks equal thirds: Malyshev v44, Areeb v16, goodpjw2008 v40"
+    },
+    {
+      "reference": 58777846,
+      "file": "submission.csv",
+      "submitted_at_api": "2026-11-23 12:26:41.733000",
+      "status": "COMPLETE",
+      "public_score": 0.95562,
+      "description": "Public verification: goodpjw2008 Board Model v40 Step Z unchanged"
+    },
+    {
+      "reference": 58777843,
+      "file": "submission.csv",
+      "submitted_at_api": "2026-11-23 12:26:33.697000",
+      "status": "COMPLETE",
+      "public_score": 0.95567,
+      "description": "Public verification: Areeb Ali Which Signals Rank Fraud v16 unchanged"
+    },
+    {
+      "reference": 58777839,
+      "file": "submission.csv",
+      "submitted_at_api": "2026-11-23 12:26:25.553000",
+      "status": "COMPLETE",
+      "public_score": 0.95567,
+      "description": "Public verification: Malyshev Danil Fraud Signal Lab v44 unchanged"
+    },
+    {
+      "reference": 58777421,
+      "file": "board_v35_final95_self_additive05.csv",
+      "submitted_at_api": "2026-11-23 12:15:23.253000",
+      "status": "COMPLETE",
+      "public_score": 0.95559,
+      "description": "95% goodpjw2008 Board Model v35 final submission.csv + 5% own additive spline network, percentile ranks"
+    },
+    {
+      "reference": 58775843,
+      "file": "single_additive.csv",
+      "submitted_at_api": "2026-11-23 11:33:37.227000",
+      "status": "COMPLETE",
+      "public_score": 0.95016,
+      "description": "Single additive spline network, fold-local numeric rates, seed42 v1"
+    },
+    {
+      "reference": 58755561,
+      "file": "step_h95_self_rate_glm05.csv",
+      "submitted_at_api": "2026-11-23 03:13:12.813000",
+      "status": "COMPLETE",
+      "public_score": 0.95502,
+      "description": "95% goodpjw2008 Board Model v35 step H, 5% own cross-fitted digit-rate GLM, percentile rank average"
+    }
+  ]
+}

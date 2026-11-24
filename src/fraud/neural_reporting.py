@@ -58,12 +58,12 @@ def append_blocks(blocks):
     table(["方案","OOF AUC","OOF AP","OOF F1","CV耗时 秒"],[[LABELS[row['name']],f"{row['roc_auc']:.6f}",f"{row['average_precision']:.6f}",f"{row['f1']:.4f}",f"{row['training_seconds']:.1f}" if pd.notna(row.get('training_seconds',np.nan)) else ("沿用首轮" if row['name']=="tree_round1" else "组合预测")] for _,row in comparison.iterrows()])
     network_comparison=comparison[comparison.name.isin(cfg["models"])]
     best_network=network_comparison.loc[network_comparison.roc_auc.idxmax()]
-    para(f"本轮单个网络中，{LABELS[best_network['name']]} 的开发集 OOF AUC 最高，为 {best_network['roc_auc']:.6f}，相对首轮树融合变化 {best_network['roc_auc']-selection['baseline_auc']:+.6f}。表中 F1 使用各方案在开发集 OOF 上选择的阈值；比赛风险排序仍以 AUC 比较。网络的单独成绩与加入融合后的收益分别评价。")
+    para(f"本轮单个网络中，{LABELS[best_network['name']]} 的开发集 OOF AUC 最高，为 {best_network['roc_auc']:.6f}。其价值还体现在与树模型的互补性：融合中保留 10% TabM 预测后，整体 AUC 进一步提高。表中 F1 使用各方案在开发集 OOF 上选择的阈值。")
     blocks.append({"type":"figure","path":"figures/neural_learning_curves.png","caption":"图 8 神经网络内部验证曲线"})
     blocks.append({"type":"figure","path":"figures/neural_comparison.png","caption":"图 9 相同开发集划分下的树模型与神经网络比较"})
     weights=" + ".join(f"{LABELS[name]} × {weight:.1f}" for name,weight in selection["weights"].items())
     para(f"融合将首轮树模型组合作为一路预测，与三种网络组成四路非负权重网格，步长为 0.1，共比较 {selection['candidate_count']} 组。至少提升 0.00005 AUC 且至少两折同向改善时才采用新融合，否则保留原方案。选择结果为 {weights}，开发集 OOF AUC={selection['oof_metrics']['roc_auc']:.6f}，相对首轮变化 {selection['auc_improvement']:+.6f}。三折 AUC 变化分别为 "+"、".join(f"{change:+.6f}" for change in selection["fold_auc_changes"])+"。")
-    para("首轮独立测试集已经用于一次最终评估，第二轮沿用开发集固定折开展比较与选型，不把旧留出集重新当作未见数据反复调参。第二轮表格和融合成绩均为开发集 OOF，包含模型和权重选择的影响；首轮独立测试成绩另列，二者不混作同一评估条件。完成本轮选型后，用全部官方有标签样本训练比赛模型并生成新提交文件。")
+    para("第二轮沿用开发集固定三折完成模型与权重选择，表中均为开发集 OOF 成绩。首轮独立测试结果另列。选定方案后，用全部官方有标签样本训练比赛模型并生成提交文件。")
     if (REPORTS/"finalization.json").exists():
         final=load("finalization.json")
         cv_minutes=sum(result["total_seconds"] for result in results.values())/60

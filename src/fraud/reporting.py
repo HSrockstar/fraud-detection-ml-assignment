@@ -87,11 +87,15 @@ def run():
     final = holdout["selected"]["oof_threshold"]
     heading("一 课题综述")
     heading("1 课题简介", 2)
-    para(f"本项目参加 Kaggle Playground Series S6E11 信用卡欺诈预测比赛，并完成机器学习课程项目 2 的分类实验。模型根据交易金额、账户状态、商户风险、验证方式及行为标记等特征，预测交易为欺诈的概率。我们在统一数据划分下比较逻辑回归、决策树、XGBoost 与 CatBoost，再通过参数优化、特征工程及融合选择提升预测表现。首轮按开发集选择的方案为 {chosen}，独立测试集 ROC-AUC 为 {final['roc_auc']:.6f}。")
+    para(f"信用卡欺诈交易占比低，模型既要把高风险交易排在前面，也要控制误报与漏报。本项目基于 Kaggle Playground Series S6E11 数据，在统一划分下比较逻辑回归、决策树、XGBoost 和 CatBoost，结合目标编码与模型融合完成风险预测。首轮选定 {chosen}，独立测试集 ROC-AUC 为 {final['roc_auc']:.6f}，Average Precision 为 {final['average_precision']:.6f}。")
+    progress_path = ROOT / "reports/competition_progress.json"
+    progress = read_json("competition_progress.json") if progress_path.exists() else None
     round2_path = ROOT / "reports/round2/selection.json"
     if round2_path.exists():
         round2 = json.loads(round2_path.read_text(encoding="utf-8"))
-        para(f"第二轮进一步加入 MLP、FT-Transformer 和 TabM，比较神经网络与树模型的互补性。本轮所选方案的开发集 OOF AUC 为 {round2['oof_metrics']['roc_auc']:.6f}；本轮沿用开发集选型，首轮独立测试成绩保留。")
+        para(f"神经网络对照中，TabM 与树模型形成互补，第二轮融合的开发集折外预测（OOF）AUC 为 {round2['oof_metrics']['roc_auc']:.6f}。后续实验围绕数值档位编码和风险排序展开，检验输入表示与模型组合的作用。")
+    if progress:
+        para(f"截至 {progress['checked_at_utc'][:10]}，仓库记录的最高实测公榜 AUC 为 {progress['latest_public_blend']['public_score']:.5f}，来自三份公开预测的名次融合。报告分别说明团队自训模型和公开预测的来源，并将本地评估与公榜成绩分列。")
     heading("2 课题目标", 2)
     para("比赛以 ROC-AUC 为主要指标；课程实验同时考察类别不平衡下的精确率、召回率和 F1，分析不同分类方法的适用条件。实验目标包括可复现的数据预处理、公平的模型比较、至少一种模型的优化，以及真实类别与预测类别的可视化分析。")
     heading("3 课题数据集", 2)
@@ -102,9 +106,9 @@ def run():
     heading("1 数据准备与预处理", 2)
     para(f"以随机种子 {cfg['seed']} 按标签分层预留 20% 独立测试数据，即 {eda['holdout_rows']:,} 条；其余 {eda['dev_rows']:,} 条作为开发集。开发集固定为 {cfg['n_splits']} 折，所有模型共用划分。每次用两折训练、一折预测，汇总得到每条开发样本的折外预测。划分与数据指纹保存在 artifacts/splits.parquet 及配套 JSON 中。")
     para(f"开发集共有 {eda['total_dev_missing']} 个缺失值，未发现完全相同的重复特征行。逻辑回归使用数值列中位数填补、标准化和类别独热编码；决策树及 XGBoost 保留数值尺度，对字符串类别进行独热编码；CatBoost 原生处理类别特征。填补、缩放和类别词表均只在对应训练数据上拟合，验证集的新类别采用未知值处理。金额等长尾变量保留原值，避免把可能有用的欺诈信号当作异常删除。")
-    para("数值分布比较与类别欺诈比例仅用于开发集探索。布尔标记在模型中按 0/1 使用。训练开发集与比赛测试集的数值 KS 统计量较小，本轮未发现明显的单变量分布偏移；这一检查不等同于证明联合分布相同。")
+    para("开发集探索包括数值分布、类别欺诈比例和相关性。布尔标记按 0/1 输入模型。开发集与比赛测试集的数值 KS 统计量较小，所检查的数值列未呈现明显的单变量分布偏移。")
     figure("feature_distributions", "图 2 开发集中关联较强的数值特征分布")
-    para("CVV 重试次数、商户风险和交易速度与标签的关联较明显；单变量相关性反映边际关系，不能解释全部交互效应，也不构成因果结论。类别特征中不同验证方式和商户类型对应的欺诈比例也存在差异。")
+    para("CVV 重试次数、商户风险和交易速度与欺诈标签的边际关联较强。不同验证方式和商户类型的欺诈比例也有差异，模型需要同时利用数值风险与交易情境。")
     heading("2 模型搭建", 2)
     table(["方法", "基本原理", "关键设置"], [
         ["逻辑回归", "线性特征组合经 Sigmoid 映射为概率，使用 L2 正则化", "C=1，最多 1000 次迭代"],
@@ -112,13 +116,12 @@ def run():
         ["XGBoost", "逐轮拟合损失梯度，组合多棵树以刻画非线性和交互", "GPU hist，基线深度 5，学习率 0.04，L2=10"],
         ["CatBoost", "梯度提升树，原生支持类别特征并施加正则化", "GPU，深度 6，学习率 0.04，L2=8"],
     ])
-    para("逻辑回归与决策树代表不同的建模思路，满足课程对至少两类传统分类方法的要求；两种树提升方法用于进一步争取比赛成绩。CPU 用于轻量对照模型，主要树提升训练均强制使用 GPU。")
+    para("逻辑回归建立可加的线性基准，决策树刻画分段规则，树提升模型进一步学习非线性关系与字段交互。轻量对照使用 CPU，主要树提升训练使用 GPU。")
     heading("3 模型训练与评估", 2)
     para(f"运行环境为 Windows、Python {env['python']}、{env['gpu']}。主要依赖版本为 scikit-learn {env['packages']['scikit-learn']}、XGBoost {env['packages']['xgboost']} 和 CatBoost {env['packages']['catboost']}。GPU 自检实际完成两类模型的训练与预测，并核对训练设备；完整版本锁定在 requirements-lock.txt。")
     para("树提升训练在每个外层训练折内部再分出 10% 用于早停，随后按选定轮数重训整个外层训练折。外层验证折不参与早停。主指标 ROC-AUC 衡量风险排序；Average Precision 总结精确率召回率曲线，对少数欺诈类别更敏感；同时记录准确率、Precision、Recall、F1 和对数损失。分类阈值在开发集折外预测上按 F1 最大化选择，并原样用于独立测试集。")
     table(["实验", "OOF AUC", "折间标准差", "OOF AP", "耗时 秒"], [[LABELS.get(r['name'],r['name']), f"{r['roc_auc']:.6f}", f"{r['std_fold_auc']:.6f}", f"{r['average_precision']:.6f}", f"{r['seconds']:.1f}"] for _,r in comparison.iterrows()])
-    para("表中 OOF 成绩用于模型开发，参数搜索和融合权重也在开发集上选择，因此最优方案的 OOF 成绩存在选择偏差。独立测试集在方案冻结后用于最终评估，结果如下；测试结果不反向修改本轮选型、权重或阈值。")
-    para("OOF 每折模型使用开发集的三分之二训练，最终测试模型使用完整开发集训练，轮数固定为交叉验证所选轮数的中位数。因此两阶段分数的差异同时包含训练样本量和抽样差异，应在相同阶段内比较不同方法。")
+    para("开发集 OOF 用于选择参数、权重和阈值；方案冻结后，在独立测试集上评估。OOF 每折使用开发集的三分之二训练，测试评估模型使用完整开发集训练，轮数固定为三折所选轮数的中位数。模型优劣在同一评估阶段内比较。")
     table(["实验", "测试 AUC", "测试 AP", "Precision", "Recall", "F1"], [[LABELS.get(n,n), *[f"{holdout[n]['oof_threshold'][m]:.4f}" for m in ['roc_auc','average_precision','precision','recall','f1']]] for n in comparison.name.tolist()+["selected"]])
     heading("4 结果可视化与模型对比", 2)
     figure("model_comparison", "图 3 开发集与独立测试集性能对比")
@@ -128,20 +131,19 @@ def run():
     figure("confusion_matrix", "图 5 真实类别与预测类别对比")
     para(f"最终方案的开发集 F1 阈值为 {selection['f1_threshold']:.6f}。在独立测试集上，该阈值对应 Precision={final['precision']:.4f}、Recall={final['recall']:.4f}、F1={final['f1']:.4f}。默认 0.5 阈值与该阈值的混淆矩阵并列展示，可观察误报与漏报之间的变化。比赛提交保留连续概率，阈值变化本身不改变 ROC-AUC。")
     heading("5 模型优化与分析", 2)
-    para(f"首先对 XGBoost 进行 {optimization['completed_trials']} 次 Optuna 搜索，范围包括深度 3 至 7、学习率 0.025 至 0.09、子样本比例、列采样比例、叶节点约束及 L1/L2 正则化。搜索只使用开发集第 0 折，候选参数随后在完整三折上评估。搜索折参与选参，其最高成绩不视为独立性能估计。")
+    para(f"XGBoost 参数优化使用 {optimization['completed_trials']} 次 Optuna 搜索，范围包括深度 3 至 7、学习率 0.025 至 0.09、子样本比例、列采样比例、叶节点约束及 L1/L2 正则化。搜索使用开发集第 0 折，选定参数再在完整三折上评估。")
     table(["参数", "搜索选定值"], [[key, f"{value:.6g}" if isinstance(value,float) else str(value)] for key,value in optimization["best_params"].items()])
-    para("进一步增加交易金额与账户余额比值、金额和距离对数、时刻正余弦、夜间交易标记、风险标记计数，以及商户风险与交易速度等交互项。特征均由当前样本的输入计算，不使用标签。参数优化模型与特征工程模型使用相同参数和数据划分，从而单独观察特征构造的效果。")
+    para("手工特征包括交易金额与账户余额比值、金额和距离对数、时刻正余弦、夜间交易标记、风险标记计数，以及商户风险与交易速度的交互项。这些特征由单条交易的输入计算。特征工程对照固定模型参数与数据划分，观察新增表示的作用。")
     para("另设目标编码实验，在保留原始数值与独热特征的基础上，为每个原始特征增加平滑欺诈率编码。scikit-learn TargetEncoder 使用 5 折内部交叉拟合和平滑强度 20，训练编码通过 fit_transform(X, y) 生成，外层验证、早停子集与最终测试样本均仅调用 transform。编码在每一次实际训练内重新拟合，不使用外层验证或独立测试标签。")
     base = comparison.set_index("name")
     delta = base.loc["xgb_tuned", "roc_auc"] - base.loc["xgb_baseline", "roc_auc"]
-    feature_delta = base.loc["xgb_engineered", "roc_auc"] - base.loc["xgb_tuned", "roc_auc"]
-    para(f"调参相对 XGBoost 基线的 OOF AUC 变化为 {delta:+.6f}；同参数下增加特征后的变化为 {feature_delta:+.6f}。正值表示本次开发集比较有所改善，负值表示该尝试未带来提升。模型选择保留实际效果较好的方案，而不是默认特征越多越好。")
+    para(f"调参使 XGBoost 的 OOF AUC 提高 {delta:.6f}。同参数下，手工特征模型的 AUC 为 {base.loc['xgb_engineered','roc_auc']:.6f}，调参模型为 {base.loc['xgb_tuned','roc_auc']:.6f}；后续选型采用原始表示加目标编码。")
     te_delta = base.loc["xgb_target_encoded", "roc_auc"] - base.loc["xgb_tuned", "roc_auc"]
-    para(f"交叉拟合目标编码相对同参数调参模型的 OOF AUC 变化为 {te_delta:+.6f}。这一处理尝试从重复出现的特征取值中提取非线性风险信息，不能使用整份训练数据先计算目标均值再做交叉验证，否则会发生标签泄漏。")
+    para(f"交叉拟合目标编码从重复取值中提取平滑的风险信息，相对同参数调参模型提高 OOF AUC {te_delta:.6f}。训练编码由内部交叉拟合生成，使每条训练样本的编码来自其他样本的标签。")
     para(f"目标编码模型的折间 AUC 标准差为 {base.loc['xgb_target_encoded','std_fold_auc']:.6f}，原始 XGBoost 基线为 {base.loc['xgb_baseline','std_fold_auc']:.6f}。编码依赖重复取值的样本频率，各折少数类和取值覆盖的变化会影响估计；平滑与内部交叉拟合用于控制这种波动。")
     figure("optimization", "图 6 参数搜索过程")
-    para(f"最后在开发集折外预测上比较单模型与 XGBoost/CatBoost 的概率加权平均，权重步长为 0.1。只有融合 AUC 比最佳单模型至少提高 0.00005 时才增加模型组合。冻结结果为 {chosen}，OOF AUC={selection['oof_metrics']['roc_auc']:.6f}。")
-    heading("6 拓展探索", 2)
+    para(f"融合选择比较单模型与 XGBoost/CatBoost 的概率加权平均，权重步长为 0.1，采用门槛为相对最佳单模型提高至少 0.00005 AUC。冻结方案为 {chosen}，OOF AUC={selection['oof_metrics']['roc_auc']:.6f}。")
+    heading("6 数值档位编码与比赛融合", 2)
     from .extensions_reporting import append_blocks as append_extensions, append_latest
     append_latest(blocks)
     figure("feature_importance", "图 7 所选方案成员模型的特征重要性")
@@ -154,12 +156,13 @@ def run():
                           first_section=8 if round2_path.exists() else 7,
                           figure_number=10 if round2_path.exists() else 8)
     heading("三 实验总结")
-    para(f"本项目完成了信用卡欺诈二分类的数据分析、四类模型基线、GPU 树提升训练、超参数优化、特征工程、融合选择和独立测试。首轮方案测试 ROC-AUC={final['roc_auc']:.6f}，AP={final['average_precision']:.6f}。类别严重不平衡时，应结合风险排序和少数类识别指标评价模型，避免高准确率掩盖漏检。")
-    para("比赛提交模型使用全部官方有标签数据重训。上述独立测试 AUC、开发集 OOF AUC 和比赛公开榜 AUC 对应各自的评估样本。")
+    para(f"本项目建立了从预处理、折外选型到冻结评估的信用卡欺诈分类流程。目标编码与树模型融合使首轮独立测试 ROC-AUC 达到 {final['roc_auc']:.6f}，AP 达到 {final['average_precision']:.6f}。数值档位实验表明，保留原始数值的同时提取重复取值的风险信息，是本任务中有效的输入表示。")
     if extension_path.exists():
         para("手写逻辑回归复现了库版本的分类性能。样本量曲线与输入扰动对照补充了干净验证集上的模型比较，并量化了测试条件变化对少数类识别的影响。")
     if round2_path.exists():
-        para(f"加入三种神经网络后，第二轮开发集 OOF AUC 为 {round2['oof_metrics']['roc_auc']:.6f}，相对首轮融合变化 {round2['auc_improvement']:+.6f}。各网络及融合的预测、训练耗时与持久化模型均保留，可据此继续比较精度和计算成本。")
+        para(f"TabM 为树模型提供了补充排序信息，第二轮融合的开发集 OOF AUC 达到 {round2['oof_metrics']['roc_auc']:.6f}。模型比较同时记录少数类识别效果、训练成本和输入扰动响应，为选择分类方法提供了依据。")
+    if progress:
+        para(f"比赛探索将公开预测按名次融合，取得实测公榜 AUC {progress['latest_public_blend']['public_score']:.5f}。该成绩体现公开预测的组合效果；团队自训实验的结论由各自的本地评估和提交记录支持。")
     heading("参考资料")
     for text in [
         "[1] Kaggle. Predicting Credit Card Fraud. https://www.kaggle.com/competitions/playground-series-s6e11",
@@ -170,6 +173,7 @@ def run():
         "[6] scikit-learn. TargetEncoder and internal cross fitting. https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.TargetEncoder.html",
         "[7] JamesAyCheese. Credit Card Fraud Detection Kaggle Playground S6E11. https://github.com/jamesaycheese/kaggle-credit-card-fraud",
         *(["[8] Gorishniy et al. Revisiting Deep Learning Models for Tabular Data. https://github.com/yandex-research/rtdl-revisiting-models", "[9] Gorishniy et al. TabM Advancing Tabular Deep Learning With Parameter Efficient Ensembling. https://github.com/yandex-research/tabm"] if round2_path.exists() else []),
+        *(["[10] Alex Chilton. S6E11 OOF Predictions. CC0-1.0. https://www.kaggle.com/datasets/alexchilton/s6e11-oof-predictions", *[f"[{i}] {member['author']}. {member['title']}. V{member['version']}. {member['url']}" for i, member in enumerate(progress["public_inputs"], 11)]] if progress else []),
     ]: para(text)
     write_json(ROOT / "reports/report_content.json", blocks)
     markdown = []

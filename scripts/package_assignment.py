@@ -29,6 +29,9 @@ def main():
     files=[]
     for folder in ["src", "scripts", "configs", "tests", "docs", "reports", "prompts", "作业要求"]:
         files.extend(p for p in (ROOT / folder).rglob("*") if p.is_file() and "__pycache__" not in p.parts)
+    experiment_dir = ROOT / "experiments/s6e11"
+    files.extend(p for p in experiment_dir.iterdir()
+                 if p.is_file() and (p.suffix in {".py", ".md"} or p.name == "public_blend_45_45_10.csv"))
     files.extend(ROOT / name for name in ["README.md", "pytest.ini", ".gitignore", ".gitattributes"])
     files.extend(ROOT.glob("requirements*.txt"))
     if (ROOT/"reports/round2/selection.json").exists():
@@ -48,7 +51,7 @@ def main():
             assert not any(part in {".venv","data","artifacts",".git"} for part in Path(name).parts)
             assert Path(name).name not in {"kaggle.json",".env"}
     with archive.open("rb") as stream: digest=hashlib.file_digest(stream,"sha256").hexdigest()
-    (output / "package_manifest.json").write_text(json.dumps({"file":filename,"bytes":archive.stat().st_size,"sha256":digest,"files":len(set(files)),"data_recovery":"按 README 恢复数据，运行 scripts/run.py all 重建首轮及手写算法和鲁棒性实验，再按第二轮步骤训练并核验神经网络。","contributions":"按用户要求留白，正式提交前需补齐。"},ensure_ascii=False,indent=2),encoding="utf-8")
+    (output / "package_manifest.json").write_text(json.dumps({"file":filename,"bytes":archive.stat().st_size,"sha256":digest,"files":len(set(files)),"data_recovery":"按 README 恢复数据，运行 scripts/run.py all 重建课程主实验，再按第二轮步骤训练神经网络。后续五折脚本另见 experiments/s6e11/README.md。","public_predictions":"包含最高分公开融合 CSV、来源说明和 API 核验记录；该轮训练缓存与外部模型文件不在包内。","contributions":"按用户要求留白，正式提交前需补齐。"},ensure_ascii=False,indent=2),encoding="utf-8")
     print(archive)
 
 

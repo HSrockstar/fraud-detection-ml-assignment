@@ -1,12 +1,14 @@
 {
   "passed": true,
-  "checked_files": 182,
-  "archive_bytes": 2732285,
-  "sha256": "4dc14277670ef5c67d58f4037e9af14639535ab2eb0403ce80f6acd28a7819c7",
+  "checked_at_utc": "2026-11-24T02:41:06.707687+00:00",
+  "checked_files": 215,
+  "archive_bytes": 6053351,
+  "sha256": "b67b4089f72523e83d0757dd15951debeb158b301037c8e079e61510faf881d1",
   "report_snapshot_separated": true,
+  "all_archive_files_match_workspace": true,
   "source_ast_valid": true,
-  "extracted_unit_tests": 39,
-  "cold_extensions_rebuilt": true,
-  "recomputed_prediction_conditions": 22,
-  "max_absolute_metric_difference": 0.0
+  "document_pages": 14,
+  "public_blend_csv_matches_verified_sha256": true,
+  "current_workspace_unit_tests": 39,
+  "cold_experiment_rebuild_run_this_update": false
 }

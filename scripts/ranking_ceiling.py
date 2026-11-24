@@ -223,11 +223,11 @@ def leftover_columns(dev: pd.DataFrame, loud: pd.Series) -> list[dict]:
 
 def decide(within_auc: float, quiet_overlap: bool, dead_columns: list[str]) -> dict:
     return {
-        "action": "停止在现有列上继续加特征或更换模型",
+        "action": "以当前融合的分组误差定位后续编码与排序实验",
         "reason": (
-            f"同一组标记内部 AUC {within_auc:.4f} 是当前融合已经排出的成绩，主要来自商户风险、交易速度和 CVV 次数，不是待做的新步骤。"
-            "夜间、距离、余额、金额、星期、卡组织和渠道在有标记交易上接近随机。"
-            "没有这些标记的欺诈，分数落在同类正常交易内部。"
+            f"同一组标记内部的加权 AUC 为 {within_auc:.4f}，说明融合在标记之外还利用了数值风险信息。"
+            "若干字段在有标记交易中的单列区分度接近 0.5，无标记欺诈与正常交易的预测分数存在重叠。"
+            "这些结果描述当前模型，不能推导现有字段或其他模型的性能上限。"
         ),
         "within_pattern_auc_is_current_model": True,
         "quiet_fraud_inside_normal_mass": quiet_overlap,
@@ -240,17 +240,17 @@ def markdown(result: dict) -> str:
     decision = result["decision"]
     pieces = result["pair_decomposition"]["pieces"]
     lines = [
-        "# 当前融合的排序上限",
+        "# 整数与小数档融合的分组排序诊断",
         "",
-        "范围：开发集折外预测。概率为 `xgb_r2_parts_smooth80` × 0.7 + `cat_r2_parts` × 0.3。不训练新模型，不使用已经看过的 20% 独立测试集，不改变当前提交。",
+        "范围：既定开发集三折预测，模型为 `xgb_r2_parts_smooth80` × 0.7 + `cat_r2_parts` × 0.3。本诊断分解该模型的排序表现；后续实验及实测提交见 `docs/实验进展与复现索引.md`。",
         "",
         f"结论：{decision['action']}。{decision['reason']}",
         "",
-        "格子内的 0.84 不能读成“还有一块没做”。那是现有融合在标记相同的交易里，靠风险分、速度和 CVV 次数已经拉开的距离。",
+        "同一标记组合内的 AUC 衡量当前模型的细粒度排序，适合用于比较误差分布。它不是数据的可达上限；单列 AUC 也不能排除该列在新编码或交互中的作用。",
         "",
         "## 全体分数从哪里来",
         "",
-        f"开发集 {zones['all']['rows']} 行，欺诈 {zones['all']['frauds']} 笔，融合 AUC {zones['all']['auc']:.4f}。有任一响亮标记的交易 {zones['loud']['rows']} 行，其中欺诈 {zones['loud']['frauds']} 笔，内部 AUC {zones['loud']['auc']:.4f}。没有任何这些标记的交易 {zones['quiet']['rows']} 行，欺诈 {zones['quiet']['frauds']} 笔，内部 AUC {zones['quiet']['auc']:.4f}。",
+        f"开发集 {zones['all']['rows']} 行，欺诈 {zones['all']['frauds']} 笔，融合 AUC {zones['all']['auc']:.4f}。有任一所选风险标记的交易 {zones['loud']['rows']} 行，其中欺诈 {zones['loud']['frauds']} 笔，内部 AUC {zones['loud']['auc']:.4f}。没有这些标记的交易 {zones['quiet']['rows']} 行，欺诈 {zones['quiet']['frauds']} 笔，内部 AUC {zones['quiet']['auc']:.4f}。",
         "",
         "把全部欺诈—正常配对拆开后，融合的全体 AUC 主要由“有标记的欺诈”对上“无标记的正常交易”贡献：",
         "",
@@ -269,7 +269,7 @@ def markdown(result: dict) -> str:
         )
     lines.extend([
         "",
-        f"四类配对加总为 {result['pair_decomposition']['reconstructed_auc']:.4f}，与直接计算的全体 AUC {zones['all']['auc']:.4f} 一致。有标记欺诈对上无标记正常交易，已经有 99.4% 排对。有标记交易内部的胜率是 92.4%，剩下的混排主要是高分正常交易和高分欺诈长得一样。没有标记的 540 笔欺诈只占全部配对的 3.3%，分数落在同类正常交易里面。",
+        f"四类配对加总为 {result['pair_decomposition']['reconstructed_auc']:.4f}，与直接计算的全体 AUC {zones['all']['auc']:.4f} 一致。有标记欺诈与无标记正常交易的配对正确率较高，组内排序则更难。无标记欺诈的分数与同类正常交易重叠，可单独检查其错排样本。",
         "",
         "## 同一组标记内部",
         "",
